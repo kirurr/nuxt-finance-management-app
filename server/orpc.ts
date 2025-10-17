@@ -15,7 +15,7 @@ export const authed = pub.use(async ({ context, next }) => {
   });
 
   if (!session || !session.session || !session.user) {
-    throw new ORPCError("UNAUTHORIZED", { message: 'sfsodfsadofsadjfsa' });
+    throw new ORPCError("UNAUTHORIZED");
   }
 
   return next({
