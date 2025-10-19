@@ -8,7 +8,7 @@ const isLoadingRef = ref<boolean>(false)
 
 async function handleSignIn() {
 	isLoadingRef.value = true
-	const { data, error } = await authClient.signIn.email({
+	const { error } = await authClient.signIn.email({
 		callbackURL: '/',
 		email: email.value,
 		password: password.value,
@@ -24,8 +24,8 @@ async function handleSignIn() {
 <template>
   <div>
     <form @submit.prevent="handleSignIn">
-      <input type="email" v-model="email" placeholder="email" />
-      <input type="password" v-model="password" placeholder="password" />
+      <input v-model="email" type="email" placeholder="email" >
+      <input v-model="password" type="password" placeholder="password" >
 			<button :disabled="isLoadingRef">sign in</button>
 			<em>{{ errorRef }}</em>
     </form>
