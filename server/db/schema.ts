@@ -1,9 +1,5 @@
 import { sql } from "drizzle-orm";
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
-
-export const test = sqliteTable("test", {
-  id: integer().primaryKey({ autoIncrement: true }),
-});
+import { sqliteTable, text, integer, check } from "drizzle-orm/sqlite-core";
 
 export const user = sqliteTable("user", {
   id: text("id").primaryKey(),
@@ -77,4 +73,61 @@ export const verification = sqliteTable("verification", {
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
+});
+
+const transactionTypeEnum = ["expense", "income"] as const;
+
+export const transactionCategory = sqliteTable("transaction_category", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  iconPath: text("icon_path").notNull(),
+});
+
+export const transaction = sqliteTable("transaction", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id),
+  categoryId: integer("category_id")
+    .notNull()
+    .references(() => transactionCategory.id),
+  description: text("description"),
+  type: text("type", { enum: transactionTypeEnum }),
+  amount: integer("amount").notNull(),
+  date: integer("date", { mode: "timestamp" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const userBudget = sqliteTable(
+  "user_budget",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    amount: integer("amount").notNull(),
+    isActive: integer("is_active", { mode: "boolean" }).default(true).unique(),
+    month: integer("month").notNull(),
+    year: integer("year").notNull(),
+  },
+  (table) => ({
+    monthCheck: check("month_check", sql`${table.month} BETWEEN 1 AND 12`),
+    yearCheck: check("year_check", sql`${table.year} >= 2000`),
+  }),
+);
+
+export const notification = sqliteTable("notification", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id),
+  isSeen: integer("is_seen", { mode: "boolean" }).notNull().default(false),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(CURRENT_TIMESTAMP)`),
+  name: text("name").notNull(),
+  description: text("description"),
+  iconPath: text("icon_path").notNull(),
 });
