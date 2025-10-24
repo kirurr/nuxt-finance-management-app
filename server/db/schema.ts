@@ -79,8 +79,13 @@ const transactionTypeEnum = ["expense", "income"] as const;
 
 export const transactionCategory = sqliteTable("transaction_category", {
   id: integer("id").primaryKey({ autoIncrement: true }),
+	userId: text("user_id")
+		.notNull()
+		.references(() => user.id),
   name: text("name").notNull(),
-  iconPath: text("icon_path").notNull(),
+  iconId: integer("icon_id")
+    .notNull()
+    .references(() => icon.id),
 });
 
 export const transaction = sqliteTable("transaction", {
@@ -89,15 +94,15 @@ export const transaction = sqliteTable("transaction", {
     .notNull()
     .references(() => user.id),
   categoryId: integer("category_id")
-    .notNull()
     .references(() => transactionCategory.id),
+	name: text("name").notNull(),
   description: text("description"),
-  type: text("type", { enum: transactionTypeEnum }),
+  type: text("type", { enum: transactionTypeEnum }).notNull(),
   amount: integer("amount").notNull(),
   date: integer("date", { mode: "timestamp" }).notNull(),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(CURRENT_TIMESTAMP)`),
+    .default(sql`(strftime('%s', 'now'))`),
 });
 
 export const userBudget = sqliteTable(
@@ -126,8 +131,16 @@ export const notification = sqliteTable("notification", {
   isSeen: integer("is_seen", { mode: "boolean" }).notNull().default(false),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
-    .default(sql`(CURRENT_TIMESTAMP)`),
+    .default(sql`(strftime('%s', 'now'))`),
   name: text("name").notNull(),
   description: text("description"),
-  iconPath: text("icon_path").notNull(),
+  iconId: integer("icon_id")
+    .notNull()
+    .references(() => icon.id),
+});
+
+export const icon = sqliteTable("icon", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	name: text("name").notNull(),
+	path: text("path").notNull(),
 });

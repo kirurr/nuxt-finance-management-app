@@ -1,6 +1,6 @@
 import { ORPCError, os } from "@orpc/server";
 import { auth } from "./auth";
-import { User } from "./user/schema";
+import type { User } from "./user/schema";
 
 export interface ORPCContext {
   headers: Headers;
