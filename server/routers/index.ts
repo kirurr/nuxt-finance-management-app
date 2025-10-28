@@ -7,5 +7,5 @@ export const router = {
 		return context.user
 	}),
 	transaction: transactionRouter,
-	category: transactionCategoryRouter
+	category: transactionCategoryRouter,
 }

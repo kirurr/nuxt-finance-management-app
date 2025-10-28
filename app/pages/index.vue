@@ -2,14 +2,14 @@
 import { handleSignOut } from "~/lib/auth";
 
 definePageMeta({
-  middleware: 'auth'
-})
-
+  middleware: "auth",
+});
 </script>
 <template>
-	<div>
-		<Button @click="handleSignOut">Sign out</Button>
-		<TransactionList />
-		<NuxtPage />
-	</div>
+  <div>
+    <Button @click="handleSignOut">Sign out</Button>
+		<TransactionCreationForm />
+    <TransactionList />
+    <NuxtPage />
+  </div>
 </template>

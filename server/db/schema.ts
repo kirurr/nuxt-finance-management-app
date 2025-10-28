@@ -75,7 +75,7 @@ export const verification = sqliteTable("verification", {
     .notNull(),
 });
 
-const transactionTypeEnum = ["expense", "income"] as const;
+export const transactionTypeEnum = ["expense", "income"] as const;
 
 export const transactionCategory = sqliteTable("transaction_category", {
   id: integer("id").primaryKey({ autoIncrement: true }),

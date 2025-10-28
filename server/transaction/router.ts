@@ -8,7 +8,7 @@ import {
 import { transactionService } from "./service";
 
 export const transactionRouter = {
-  createTransacion: authed
+  createTransaction: authed
     .input(createTransactionSchema)
     .handler(async ({ input }): Promise<Transaction> => {
       return await transactionService.createTransaction(input);

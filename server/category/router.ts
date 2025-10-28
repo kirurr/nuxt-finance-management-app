@@ -8,25 +8,25 @@ import {
 import { transactionCategoryService } from "./service";
 
 export const transactionCategoryRouter = {
-  createTransacion: authed
+  createCategory: authed
     .input(createTransactionCategorySchema)
     .handler(async ({ input }): Promise<TransactionCategory> => {
       return await transactionCategoryService.createTransactionCategory(input);
     }),
-  updateTransactionCategory: authed
+  updateCategory: authed
     .input(updateTransactionCategorySchema)
     .handler(async ({ input }): Promise<TransactionCategory> => {
       return await transactionCategoryService.updateTransactionCategory(input.id, input);
     }),
-  getTransactionCategory: authed
+  getCategory: authed
     .input(z.number())
     .handler(async ({ input }): Promise<TransactionCategory> => {
       return await transactionCategoryService.getTransactionCategory(input);
     }),
-  getTransactionCategories: authed.handler(async (): Promise<TransactionCategory[]> => {
+  getCategories: authed.handler(async (): Promise<TransactionCategory[]> => {
     return await transactionCategoryService.getTransactionCategories();
   }),
-  deleteTransactionCategory: authed
+  deleteCategory: authed
     .input(z.number())
     .handler(async ({ input }): Promise<void> => {
       return await transactionCategoryService.deleteTransactionCategory(input);
