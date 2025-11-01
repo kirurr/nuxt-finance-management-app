@@ -8,19 +8,21 @@ import { useQuery } from "@tanstack/vue-query";
 
 interface Props {
   action: (data: TransactionFormData) => Promise<void>;
+  defaultValues?: TransactionFormData;
 }
 
-const { action } = defineProps<Props>();
-
-const transactionDefaultValues: TransactionFormData = {
-  name: "",
-  amount: "",
-  date: "",
-  type: "expense",
-};
+const {
+  action,
+  defaultValues = {
+    name: "",
+    amount: "",
+    date: "",
+    type: "expense",
+  },
+} = defineProps<Props>();
 
 const form = useForm({
-  defaultValues: transactionDefaultValues,
+  defaultValues: defaultValues,
   onSubmit: async ({ value }) => {
     await action(value);
   },
@@ -221,15 +223,15 @@ const categories = useQuery({
           </Field>
         </template>
       </form.Field>
+      <Field>
+        <form.Subscribe>
+          <template #default="{ canSubmit, isSubmitting }">
+            <Button type="submit" :disabled="!canSubmit">
+              {{ isSubmitting ? "..." : "Submit" }}
+            </Button>
+          </template>
+        </form.Subscribe>
+      </Field>
     </FieldGroup>
-    <Field>
-      <form.Subscribe>
-        <template #default="{ canSubmit, isSubmitting }">
-          <Button type="submit" :disabled="!canSubmit">
-            {{ isSubmitting ? "..." : "Submit" }}
-          </Button>
-        </template>
-      </form.Subscribe>
-    </Field>
   </form>
 </template>

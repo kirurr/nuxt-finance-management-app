@@ -8,7 +8,7 @@ definePageMeta({
 <template>
   <div>
     <Button @click="handleSignOut">Sign out</Button>
-		<TransactionCreationForm />
+		<TransactionDialogCreate />
     <TransactionList />
     <NuxtPage />
   </div>

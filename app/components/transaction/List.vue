@@ -29,6 +29,8 @@ const {
       <ul v-for="(transactions, index) in data.pages" :key="index">
         <li v-for="transaction in transactions.items" :key="transaction.id">
           <pre>{{ JSON.stringify(transaction, null, "\t") }}</pre>
+					<TransactionDialogUpdate :transaction-data="transaction" />
+					<TransactionDialogDelete :transaction-data="transaction" />
         </li>
       </ul>
     </div>

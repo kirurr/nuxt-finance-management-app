@@ -1,4 +1,4 @@
-import { asc, eq, and, gt } from "drizzle-orm";
+import { eq, and, gt, desc } from "drizzle-orm";
 import { db } from "../db/db";
 import { transaction } from "../db/schema";
 import type {
@@ -43,7 +43,7 @@ export const transactionRepository = {
         ),
       )
       .limit(pageSize + 1)
-      .orderBy(asc(transaction.date));
+      .orderBy(desc(transaction.createdAt));
 
     const hasNextPage = rows.length > pageSize;
     const items = hasNextPage ? rows.slice(0, pageSize) : rows;
