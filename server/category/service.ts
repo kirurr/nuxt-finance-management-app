@@ -1,5 +1,5 @@
 import { transactionCategoryRepository } from "./repository";
-import type { CreateTransactionCategory, TransactionCategory, UpdateTransactionCategory } from "./schema";
+import type { CategoryWithIconAndColor, CreateTransactionCategory, TransactionCategory, UpdateTransactionCategory } from "./schema";
 
 export const transactionCategoryService = {
   async createTransactionCategory(data: CreateTransactionCategory): Promise<TransactionCategory> {
@@ -8,11 +8,11 @@ export const transactionCategoryService = {
 	async updateTransactionCategory(id: number, data: UpdateTransactionCategory): Promise<TransactionCategory> {
 		return await transactionCategoryRepository.updateTransactionCategory(id, data);
 	},
-  async getTransactionCategory(id: number): Promise<TransactionCategory> {
+  async getTransactionCategory(id: number): Promise<CategoryWithIconAndColor> {
     return await transactionCategoryRepository.getTransactionCategory(id);
   },
-  async getTransactionCategories(): Promise<TransactionCategory[]> {
-    return await transactionCategoryRepository.getTransactionCategories();
+  async getTransactionCategories(userId: string): Promise<CategoryWithIconAndColor[]> {
+    return await transactionCategoryRepository.getTransactionCategories(userId);
   },
 	async deleteTransactionCategory(id: number): Promise<void> {
 		return await transactionCategoryRepository.deleteTransactionCategory(id);

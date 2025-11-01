@@ -4,6 +4,7 @@ import {
   createTransactionSchema,
   updateTransactionSchema,
   type Transaction,
+  type TransactionWithCategory,
 } from "./schema";
 import { transactionService } from "./service";
 
@@ -20,7 +21,7 @@ export const transactionRouter = {
     }),
   getTransaction: authed
     .input(z.number())
-    .handler(async ({ input }): Promise<Transaction> => {
+    .handler(async ({ input }): Promise<TransactionWithCategory> => {
       return await transactionService.getTransaction(input);
     }),
   getTransactionsByUserId: authed
@@ -34,7 +35,7 @@ export const transactionRouter = {
       async ({
         context,
         input,
-      }): Promise<{ items: Transaction[]; nextCursor: number | null }> => {
+      }): Promise<{ items: TransactionWithCategory[]; nextCursor: number | null }> => {
         return await transactionService.getTransactionsByUserId(
           context.user.id,
           input.pageSize,

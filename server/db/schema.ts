@@ -79,13 +79,16 @@ export const transactionTypeEnum = ["expense", "income"] as const;
 
 export const transactionCategory = sqliteTable("transaction_category", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-	userId: text("user_id")
-		.notNull()
-		.references(() => user.id),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id),
   name: text("name").notNull(),
   iconId: integer("icon_id")
     .notNull()
     .references(() => icon.id),
+  colorId: integer("color_id")
+    .notNull()
+    .references(() => color.id),
 });
 
 export const transaction = sqliteTable("transaction", {
@@ -93,9 +96,8 @@ export const transaction = sqliteTable("transaction", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id),
-  categoryId: integer("category_id")
-    .references(() => transactionCategory.id),
-	name: text("name").notNull(),
+  categoryId: integer("category_id").references(() => transactionCategory.id),
+  name: text("name").notNull(),
   description: text("description"),
   type: text("type", { enum: transactionTypeEnum }).notNull(),
   amount: integer("amount").notNull(),
@@ -140,7 +142,12 @@ export const notification = sqliteTable("notification", {
 });
 
 export const icon = sqliteTable("icon", {
-	id: integer("id").primaryKey({ autoIncrement: true }),
-	name: text("name").notNull(),
-	path: text("path").notNull(),
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  path: text("path").notNull(),
+});
+
+export const color = sqliteTable("color", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  hex: text("hex").notNull(),
 });

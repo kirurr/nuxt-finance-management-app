@@ -48,11 +48,9 @@ const defaultValues: TransactionFormData = {
 
 <template>
   <div>
-    <div v-if="!session.isPending">
       <TransactionForm
         :default-values="defaultValues"
         :action="mutation.mutateAsync"
       />
-    </div>
   </div>
 </template>

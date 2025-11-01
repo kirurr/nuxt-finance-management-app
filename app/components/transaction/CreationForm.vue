@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { getLocalTimeZone, parseDate } from "@internationalized/date";
-import {  useMutation } from "@tanstack/vue-query";
-import type {
-  TransactionFormData,
-} from "~~/server/transaction/schema";
+import { useMutation } from "@tanstack/vue-query";
+import type { TransactionFormData } from "~~/server/transaction/schema";
 
 const { closeDialog } = defineProps<{
   closeDialog: () => void;
@@ -25,15 +23,13 @@ const mutation = useMutation({
   mutationKey: ["transactions"],
   onSuccess: async (_, __, ___, context) => {
     await context.client.invalidateQueries({ queryKey: ["transactions"] });
-		closeDialog();
+    closeDialog();
   },
 });
 </script>
 
 <template>
   <div>
-    <div v-if="!session.isPending">
-      <TransactionForm :action="mutation.mutateAsync" />
-    </div>
+    <TransactionForm :action="mutation.mutateAsync" />
   </div>
 </template>

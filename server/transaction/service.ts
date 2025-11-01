@@ -3,6 +3,7 @@ import type {
   CreateTransaction,
   Transaction,
   UpdateTransaction,
+  TransactionWithCategory
 } from "./schema";
 
 export const transactionService = {
@@ -15,14 +16,14 @@ export const transactionService = {
   ): Promise<Transaction> {
     return await transactionRepository.updateTransaction(id, data);
   },
-  async getTransaction(id: number): Promise<Transaction> {
+  async getTransaction(id: number): Promise<TransactionWithCategory> {
     return await transactionRepository.getTransaction(id);
   },
   async getTransactionsByUserId(
     id: string,
     pageSize?: number,
     cursor?: number,
-  ): Promise<{ items: Transaction[]; nextCursor: number | null }> {
+  ): Promise<{ items: TransactionWithCategory[]; nextCursor: number | null }> {
     return await transactionRepository.getTransactionsByUserId(
       id,
       pageSize,

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import DatePicker from "@/components/ui/DatePicker.vue";
+import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useForm } from "@tanstack/vue-form";
 import type { TransactionFormData } from "~~/server/transaction/schema";
 import { z } from "zod";
@@ -33,9 +35,13 @@ const maxDate = today(getLocalTimeZone());
 
 const { $orpc } = useNuxtApp();
 
+const session = authClient.useSession();
+
 const categories = useQuery({
-  queryKey: ["categories"],
-  queryFn: async () => await $orpc.category.getCategories.call(),
+  queryKey: ["categories", session.value.data?.user.id],
+  queryFn: async () =>
+    await $orpc.category.getCategories.call(session.value.data!.user.id),
+  enabled: session.value.data?.user.id !== undefined,
 });
 </script>
 
@@ -150,49 +156,64 @@ const categories = useQuery({
         <template #default="{ field }">
           <Field>
             <FieldLabel :for="field.name">Category</FieldLabel>
-            <Select
-              :id="field.name"
-              :name="field.name"
+            <div class="flex items-center gap-2 mb-2">
+              <CategoryDialogCreate />
+            </div>
+            <RadioGroup
               :model-value="field.state.value"
-              @update:model-value="
-                (val) => field.handleChange(val ? String(val) : '')
-              "
-              @blur="field.handleBlur"
+              class="space-y-2"
+              @update:model-value="(val: string) => field.handleChange(val)"
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup v-if="categories.data">
-                  <SelectLabel>Categories</SelectLabel>
-                  <div
-                    v-if="categories.isLoading.value"
-                    class="px-2 py-1.5 text-sm text-muted-foreground"
-                  >
-                    Loading categories...
-                  </div>
-                  <div
-                    v-if="categories.isError.value"
-                    class="px-2 py-1.5 text-sm text-destructive"
-                  >
-                    Failed to load categories
-                  </div>
-                  <SelectItem
-                    v-for="category in categories.data.value"
-                    :key="category.id"
+              <div
+                v-if="categories.isLoading.value"
+                class="px-2 py-1.5 text-sm text-muted-foreground"
+              >
+                Loading categories...
+              </div>
+              <div
+                v-if="categories.isError.value"
+                class="px-2 py-1.5 text-sm text-destructive"
+              >
+                Failed to load categories
+              </div>
+              <div
+                v-for="category in categories.data?.value"
+                :key="category.id"
+                class="flex items-center justify-between p-3 border rounded-md"
+                :style="{ backgroundColor: category.color?.hex }"
+              >
+                <div class="flex items-center space-x-3">
+                  <RadioGroupItem
+                    :id="`category-${category.id}`"
                     :value="category.id.toString()"
+                    :checked="field.state.value === category.id.toString()"
+                  />
+                  <FieldLabel
+                    :for="`category-${category.id}`"
+                    class="cursor-pointer"
                   >
                     {{ category.name }}
-                  </SelectItem>
-                  <div
-                    v-if="categories.data.value?.length === 0"
-                    class="px-2 py-1.5 text-sm text-muted-foreground"
-                  >
-                    No categories available
-                  </div>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+                    <NuxtImg
+                      v-if="category.icon?.path"
+                      :src="category.icon?.path"
+                      width="24"
+                      height="24"
+                      alt="Icon"
+                    />
+                  </FieldLabel>
+                </div>
+                <div class="flex space-x-2">
+                  <CategoryDialogUpdate :category-data="category" />
+                  <CategoryDialogDelete :category-data="category" />
+                </div>
+              </div>
+              <div
+                v-if="categories.data?.value?.length === 0"
+                class="px-2 py-1.5 text-sm text-muted-foreground"
+              >
+                No categories available
+              </div>
+            </RadioGroup>
             <FieldError>{{
               field.state.meta.errors.map((e) => e?.message).join(", ")
             }}</FieldError>

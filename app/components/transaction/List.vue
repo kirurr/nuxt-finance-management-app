@@ -27,10 +27,23 @@ const {
     <span v-else-if="error">Error: {{ error.message ?? "Unknown error" }}</span>
     <div v-else-if="data">
       <ul v-for="(transactions, index) in data.pages" :key="index">
-        <li v-for="transaction in transactions.items" :key="transaction.id">
+        <li
+          v-for="transaction in transactions.items"
+          :key="transaction.id"
+          :style="{ backgroundColor: transaction.category?.color?.hex }"
+        >
           <pre>{{ JSON.stringify(transaction, null, "\t") }}</pre>
-					<TransactionDialogUpdate :transaction-data="transaction" />
-					<TransactionDialogDelete :transaction-data="transaction" />
+          <div>
+            <NuxtImg
+							v-if="transaction.category?.icon?.path"
+              :src="transaction.category?.icon?.path"
+              width="24"
+              height="24"
+              alt="Icon"
+            />
+          </div>
+          <TransactionDialogUpdate :transaction-data="transaction" />
+          <TransactionDialogDelete :transaction-data="transaction" />
         </li>
       </ul>
     </div>
