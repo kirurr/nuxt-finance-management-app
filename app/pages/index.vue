@@ -8,7 +8,6 @@ definePageMeta({
 <template>
   <div>
     <Button @click="handleSignOut">Sign out</Button>
-		<CategoryCreationForm :close-dialog="() => ({})" />
 		<TransactionDialogCreate />
     <TransactionList />
     <NuxtPage />

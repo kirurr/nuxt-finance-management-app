@@ -9,10 +9,7 @@ import type { TransactionCategory } from "../category/schema";
 import type { Icon } from "../icon/schema";
 import z from "zod";
 import type { Color } from "../color/schema";
-
-type AllString<T> = {
-  [K in keyof T]: string;
-};
+import { AllString } from "../utils";
 
 export const transactionSchema = createSelectSchema(transaction);
 

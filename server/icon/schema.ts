@@ -5,11 +5,7 @@ import {
 } from "drizzle-zod";
 import { icon } from "../db/schema";
 import z from "zod";
-
-type AllString<T> = {
-  [K in keyof T]: string;
-};
-
+import type { AllString } from "../utils";
 export const iconSchema = createSelectSchema(icon);
 
 export type Icon = z.infer<typeof iconSchema>;

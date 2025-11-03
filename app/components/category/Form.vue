@@ -21,11 +21,11 @@ const {
 const form = useForm({
   defaultValues: defaultValues,
   onSubmit: async ({ value }) => {
-		try {
-			await action(value);
-		} catch (error) {
-			console.error(error);
-		}
+    try {
+      await action(value);
+    } catch (error) {
+      console.error(error);
+    }
   },
 });
 
@@ -76,19 +76,14 @@ const colors = useQuery({
           <Field>
             <FieldLabel :for="field.name">Icon</FieldLabel>
             <RadioGroup
-							v-for="icon in icons.data?.value ?? []"
-							:key="icon.id"
+              v-for="icon in icons.data?.value ?? []"
+              :key="icon.id"
               :model-value="field.state.value"
               @update:model-value="(val: string) => field.handleChange(val)"
-						>
+            >
               <div class="flex items-center space-x-2">
-                <RadioGroupItem
-                  :id="icon.id.toString()"
-                  :value="icon.id.toString()"
-                />
-                <FieldLabel :for="icon.id.toString()">{{
-                  icon.name
-                }}</FieldLabel>
+                <RadioGroupItem :id="icon.name" :value="icon.id.toString()" />
+                <FieldLabel :for="icon.name">{{ icon.name }}</FieldLabel>
               </div>
             </RadioGroup>
           </Field>
@@ -106,10 +101,10 @@ const colors = useQuery({
             >
               <div class="flex items-center space-x-2">
                 <RadioGroupItem
-                  :id="color.id.toString()"
+                  :id="`color-${color.id.toString()}`"
                   :value="color.id.toString()"
                 />
-                <FieldLabel :for="color.id.toString()">{{
+                <FieldLabel :for="`color-${color.id.toString()}`">{{
                   color.hex
                 }}</FieldLabel>
               </div>
