@@ -7,6 +7,7 @@ import type { TransactionFormData } from "~~/server/transaction/schema";
 import { z } from "zod";
 import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
 import { useQuery } from "@tanstack/vue-query";
+import queryKeys from "~/lib/query-keys";
 
 interface Props {
   action: (data: TransactionFormData) => Promise<void>;
@@ -35,13 +36,10 @@ const maxDate = today(getLocalTimeZone());
 
 const { $orpc } = useNuxtApp();
 
-const session = authClient.useSession();
-
 const categories = useQuery({
-  queryKey: ["categories", session.value.data?.user.id],
+  queryKey: [...queryKeys.categories],
   queryFn: async () =>
-    await $orpc.category.getCategories.call(session.value.data!.user.id),
-  enabled: session.value.data?.user.id !== undefined,
+    await $orpc.category.getCategories.call(),
 });
 </script>
 
@@ -165,7 +163,7 @@ const categories = useQuery({
               @update:model-value="(val: string) => field.handleChange(val)"
             >
               <div
-                v-if="categories.isLoading.value"
+                v-if="categories.isPending.value"
                 class="px-2 py-1.5 text-sm text-muted-foreground"
               >
                 Loading categories...

@@ -1,6 +1,6 @@
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { userBudget } from "../db/schema";
-import type * as z from "zod";
+import * as z from "zod";
 import type { AllString } from "../utils";
 
 export const userBudgetSchema = createSelectSchema(userBudget)
@@ -13,4 +13,10 @@ export type CreateUserBudget = z.infer<typeof createUserBudgetSchema>
 
 export type UserBudgetFormData = Omit<
   AllString<CreateUserBudget>,
-  "userId" | "id" | "createdAt">
+  "userId" | "id" | "createdAt" | "isActive">
+
+export const updateUserBudgetSchema = createUpdateSchema(userBudget, {
+	id: z.number()
+})
+
+export type UpdateUserBudget = z.infer<typeof updateUserBudgetSchema>

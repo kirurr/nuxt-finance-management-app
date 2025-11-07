@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import {
-  getLocalTimeZone,
-  parseDate,
-} from "@internationalized/date";
+import { getLocalTimeZone, parseDate } from "@internationalized/date";
 import { useMutation } from "@tanstack/vue-query";
 import type {
   Transaction,
   TransactionFormData,
 } from "~~/server/transaction/schema";
+import queryKeys from "~/lib/query-keys";
 
 const { closeDialog, transactionData } = defineProps<{
   closeDialog: () => void;
@@ -28,29 +26,31 @@ const mutation = useMutation({
       amount: Number(data.amount),
     });
   },
-  mutationKey: ["transactions"],
+  mutationKey: [...queryKeys.transactions],
   onSuccess: async (_, __, ___, context) => {
-    await context.client.invalidateQueries({ queryKey: ["transactions"] });
+    await context.client.invalidateQueries({
+      queryKey: [...queryKeys.transactions],
+      exact: false,
+    });
     closeDialog();
   },
 });
 
-
 const defaultValues: TransactionFormData = {
   name: transactionData.name,
   amount: transactionData.amount.toString(),
-  date: transactionData.date.toISOString().split('T')[0]!,
+  date: transactionData.date.toISOString().split("T")[0]!,
   type: transactionData.type,
-	description: transactionData.description ?? '',
-	categoryId: transactionData.categoryId?.toString() ?? '',
+  description: transactionData.description ?? "",
+  categoryId: transactionData.categoryId?.toString() ?? "",
 };
 </script>
 
 <template>
   <div>
-      <TransactionForm
-        :default-values="defaultValues"
-        :action="mutation.mutateAsync"
-      />
+    <TransactionForm
+      :default-values="defaultValues"
+      :action="mutation.mutateAsync"
+    />
   </div>
 </template>

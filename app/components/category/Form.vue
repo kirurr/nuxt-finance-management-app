@@ -3,6 +3,7 @@ import { useForm } from "@tanstack/vue-form";
 import { useQuery } from "@tanstack/vue-query";
 import { z } from "zod";
 import type { CategoryFormData } from "~~/server/category/schema";
+import queryKeys from "~/lib/query-keys";
 
 interface Props {
   action: (data: CategoryFormData) => Promise<void>;
@@ -32,12 +33,12 @@ const form = useForm({
 const { $orpc } = useNuxtApp();
 
 const icons = useQuery({
-  queryKey: ["icons"],
+  queryKey: [...queryKeys.icons],
   queryFn: async () => await $orpc.icon.getIcons.call(),
 });
 
 const colors = useQuery({
-  queryKey: ["colors"],
+  queryKey: [...queryKeys.colors],
   queryFn: async () => await $orpc.color.getColors.call(),
 });
 </script>

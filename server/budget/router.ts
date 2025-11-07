@@ -1,7 +1,7 @@
 import { authed } from "../orpc";
 import * as z from "zod";
 import { userBudgetService } from "./service";
-import { createUserBudgetSchema } from "./schema";
+import { createUserBudgetSchema, updateUserBudgetSchema } from "./schema";
 
 export const budgetRouter = {
   getUserBudgetByMonth: authed
@@ -17,6 +17,15 @@ export const budgetRouter = {
     .input(createUserBudgetSchema)
     .handler(async ({ input, context }) => {
       return await userBudgetService.createUserBudget({
+        ...input,
+        userId: context.user.id,
+      });
+    }),
+
+  updateUserBudget: authed
+    .input(updateUserBudgetSchema)
+    .handler(async ({ input, context }) => {
+      return await userBudgetService.updateUserBudget({
         ...input,
         userId: context.user.id,
       });

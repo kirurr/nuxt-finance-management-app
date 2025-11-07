@@ -28,9 +28,8 @@ export const transactionCategoryRouter = {
       return await transactionCategoryService.getTransactionCategory(input);
     }),
   getCategories: authed
-    .input(z.string())
-    .handler(async ({ input }): Promise<CategoryWithIconAndColor[]> => {
-      return await transactionCategoryService.getTransactionCategories(input);
+    .handler(async ({ context }): Promise<CategoryWithIconAndColor[]> => {
+      return await transactionCategoryService.getTransactionCategories(context.user.id);
     }),
   deleteCategory: authed
     .input(z.number())

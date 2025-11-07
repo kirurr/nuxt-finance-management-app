@@ -2,6 +2,7 @@
 import { getLocalTimeZone, parseDate } from "@internationalized/date";
 import { useMutation } from "@tanstack/vue-query";
 import type { TransactionFormData } from "~~/server/transaction/schema";
+import queryKeys from "~/lib/query-keys";
 
 const { closeDialog } = defineProps<{
   closeDialog: () => void;
@@ -20,9 +21,12 @@ const mutation = useMutation({
       amount: Number(data.amount),
     });
   },
-  mutationKey: ["transactions"],
+  mutationKey: [...queryKeys.transactions],
   onSuccess: async (_, __, ___, context) => {
-    await context.client.invalidateQueries({ queryKey: ["transactions"] });
+    await context.client.invalidateQueries({
+      queryKey: [...queryKeys.transactions],
+      exact: false,
+    });
     closeDialog();
   },
 });

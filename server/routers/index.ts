@@ -1,3 +1,4 @@
+import { budgetRouter } from "../budget/router";
 import { transactionCategoryRouter } from "../category/router";
 import { colorRouter } from "../color/router";
 import { iconRouter } from "../icon/router";
@@ -12,4 +13,5 @@ export const router = {
 	category: transactionCategoryRouter,
 	color: colorRouter,
 	icon: iconRouter,
+	budget: budgetRouter
 }

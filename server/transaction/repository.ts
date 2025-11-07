@@ -1,4 +1,4 @@
-import { eq, and, gt, desc } from "drizzle-orm";
+import { eq, and, gt, desc, type SQL, gte, lte } from "drizzle-orm";
 import { db } from "../db/db";
 import { transaction, transactionCategory, icon, color } from "../db/schema";
 import type {
@@ -11,9 +11,6 @@ import type {
 export const transactionRepository = {
   async createTransaction(data: CreateTransaction): Promise<Transaction> {
     const result = (await db.insert(transaction).values(data).returning())[0];
-    if (!result) {
-      throw new Error("Failed to create transaction");
-    }
     return result;
   },
   async updateTransaction(
@@ -65,6 +62,31 @@ export const transactionRepository = {
         : null,
     };
   },
+
+  async getTransactionsByUserIdAndMonth(
+    id: string,
+    month: Date,
+  ): Promise<Transaction[]> {
+    const monthStart = new Date(
+      Date.UTC(month.getUTCFullYear(), month.getUTCMonth(), 1),
+    );
+    const monthEnd = new Date(
+      Date.UTC(month.getUTCFullYear(), month.getUTCMonth() + 1, 1),
+    );
+
+    const monthFilter: SQL[] = [
+      gte(transaction.date, monthStart),
+      lte(transaction.date, monthEnd),
+    ];
+
+    const rows = await db
+      .select()
+      .from(transaction)
+      .where(and(eq(transaction.userId, id), ...monthFilter));
+
+    return rows;
+  },
+
   async getTransactionsByUserId(
     id: string,
     pageSize: number = 10,

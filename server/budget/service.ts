@@ -1,5 +1,5 @@
 import { userBudgetRepository } from "./repository";
-import type { CreateUserBudget, UserBudget } from "./schema";
+import type { CreateUserBudget, UpdateUserBudget, UserBudget } from "./schema";
 
 export const userBudgetService = {
   async getUserBudgetByMonth(
@@ -11,4 +11,8 @@ export const userBudgetService = {
   async createUserBudget(data: CreateUserBudget): Promise<UserBudget> {
     return await userBudgetRepository.createUserBudget(data);
   },
+
+	async updateUserBudget(data: UpdateUserBudget): Promise<UserBudget> {
+		return await userBudgetRepository.updateUserBudget(data);
+	},
 };

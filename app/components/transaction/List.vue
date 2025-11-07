@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useInfiniteQuery } from "@tanstack/vue-query";
+import queryKeys from "~/lib/query-keys";
 
 const { $orpc } = useNuxtApp();
 
@@ -11,7 +12,7 @@ const {
   fetchNextPage,
   isFetchingNextPage,
 } = useInfiniteQuery({
-  queryKey: ["transactions"],
+  queryKey: [...queryKeys.transactions],
   initialPageParam: 0,
   queryFn: async ({ pageParam }) =>
     await $orpc.transaction.getTransactionsByUserId.call({

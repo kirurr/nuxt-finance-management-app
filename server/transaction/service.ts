@@ -33,4 +33,10 @@ export const transactionService = {
   async deleteTransaction(id: number): Promise<void> {
     return await transactionRepository.deleteTransaction(id);
   },
+	async getTransactionsByUserIdAndMonth(
+		id: string,
+		month: Date,
+	): Promise<Transaction[]> {
+		return await transactionRepository.getTransactionsByUserIdAndMonth(id, month);
+	},
 };

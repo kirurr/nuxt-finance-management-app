@@ -35,7 +35,10 @@ export const transactionRouter = {
       async ({
         context,
         input,
-      }): Promise<{ items: TransactionWithCategory[]; nextCursor: number | null }> => {
+      }): Promise<{
+        items: TransactionWithCategory[];
+        nextCursor: number | null;
+      }> => {
         return await transactionService.getTransactionsByUserId(
           context.user.id,
           input.pageSize,
@@ -43,9 +46,23 @@ export const transactionRouter = {
         );
       },
     ),
+
   deleteTransaction: authed
     .input(z.number())
     .handler(async ({ input }): Promise<void> => {
       return await transactionService.deleteTransaction(input);
+    }),
+
+  getTransactionsByUserIdAndMonth: authed
+    .input(
+      z.object({
+        month: z.date(),
+      }),
+    )
+    .handler(async ({ context, input }): Promise<Transaction[]> => {
+      return await transactionService.getTransactionsByUserIdAndMonth(
+        context.user.id,
+        input.month,
+      );
     }),
 };

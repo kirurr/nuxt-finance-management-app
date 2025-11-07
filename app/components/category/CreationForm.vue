@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useMutation } from "@tanstack/vue-query";
 import type { CategoryFormData } from "~~/server/category/schema";
+import queryKeys from "~/lib/query-keys";
 
 const { closeDialog } = defineProps<{
   closeDialog: () => void;
@@ -18,9 +19,9 @@ const mutation = useMutation({
       userId: session.value!.data!.user.id,
     });
   },
-  mutationKey: ["categories"],
+  mutationKey: [...queryKeys.categories],
   onSuccess: async (_, __, ___, context) => {
-    await context.client.invalidateQueries({ queryKey: ["categories"] });
+    await context.client.invalidateQueries({ queryKey: [...queryKeys.categories] });
     closeDialog();
   },
 });
