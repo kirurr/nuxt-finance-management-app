@@ -55,7 +55,10 @@ function setOpen(value: boolean) {
 <template>
   <Popover :open="isOpen" @update:open="(v) => setOpen(v)">
     <PopoverTrigger as-child>
-      <Button variant="outline"> Open popover </Button>
+      <Button variant="outline">
+				Open popover
+				{{ notSeenNotifications.length > 0 ? "new notifications" : "" }}
+			</Button>
     </PopoverTrigger>
     <PopoverContent>
       <div>

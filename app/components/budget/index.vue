@@ -62,5 +62,6 @@ const budgetRemaining = computed(() =>
     <div v-else>
       <BudgetDialogCreate />
     </div>
+		<BudgetTest />
   </div>
 </template>

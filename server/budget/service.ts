@@ -15,4 +15,8 @@ export const userBudgetService = {
 	async updateUserBudget(data: UpdateUserBudget): Promise<UserBudget> {
 		return await userBudgetRepository.updateUserBudget(data);
 	},
+
+	async calculateUserBudget(userId: string, month: number, year: number) {
+		return await userBudgetRepository.calculateUserBudget(userId, month, year);
+	},
 };

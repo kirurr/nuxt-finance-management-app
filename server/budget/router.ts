@@ -30,4 +30,19 @@ export const budgetRouter = {
         userId: context.user.id,
       });
     }),
+
+  calculateUserBudget: authed
+    .input(
+      z.object({
+        month: z.number(),
+        year: z.number(),
+      }),
+    )
+    .handler(async ({ input, context }) => {
+      return await userBudgetService.calculateUserBudget(
+        context.user.id,
+        input.month,
+        input.year,
+      );
+    }),
 };
