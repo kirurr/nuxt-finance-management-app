@@ -4,6 +4,7 @@ const queryKeys = {
   icons: ["icons"] as const,
   colors: ["colors"] as const,
   budget: ["budget"] as const,
+	notifications: ["notifications"] as const,
 } as const;
 
 export default queryKeys;
