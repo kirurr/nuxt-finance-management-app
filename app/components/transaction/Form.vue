@@ -102,12 +102,17 @@ const categories = useQuery({
           </Field>
         </template>
       </form.Field>
-      <form.Field name="date">
+      <form.Field
+				name="date"
+				:validators="{
+					onChange: z.string()
+				}"
+			>
         <template #default="{ field }">
           <Field>
             <FieldLabel :for="field.name">Date</FieldLabel>
             <DatePicker
-              required
+							required
               :model-value="field.state.value"
               placeholder="Pick a date"
               :min-date="minDate"
@@ -115,6 +120,9 @@ const categories = useQuery({
               class="w-full"
               @update:model-value="field.handleChange($event ?? '')"
             />
+            <FieldError>{{
+              field.state.meta.errors.map((e) => e?.message).join(", ")
+            }}</FieldError>
           </Field>
         </template>
       </form.Field>

@@ -8,7 +8,10 @@ definePageMeta({
 </script>
 <template>
   <div>
-    <Button @click="handleSignOut">Sign out</Button>
+		<div class="flex flex-row gap-4">
+			<Button @click="handleSignOut">Sign out</Button>
+			<DateSelect />
+		</div>
 		<Budget />
 		<NotificationsList />
     <TransactionDialogCreate />

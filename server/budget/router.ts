@@ -34,15 +34,21 @@ export const budgetRouter = {
   calculateUserBudget: authed
     .input(
       z.object({
-        month: z.number(),
-        year: z.number(),
+        start: z.date(),
+        end: z.date().optional(),
       }),
     )
     .handler(async ({ input, context }) => {
+			let end = input.end;
+      if (!end) {
+        end = new Date(input.start.getTime());
+        end.setMonth(end.getMonth() + 1);
+        end.setDate(0);
+      }
       return await userBudgetService.calculateUserBudget(
         context.user.id,
-        input.month,
-        input.year,
+        input.start,
+				end
       );
     }),
 };

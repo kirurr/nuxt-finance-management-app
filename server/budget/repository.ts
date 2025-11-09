@@ -30,36 +30,41 @@ export const userBudgetRepository = {
     )[0];
   },
 
-  async calculateUserBudget(userId: string, month: number, year: number) {
+  async calculateUserBudget(userId: string, start: Date, end: Date) {
     const result = await db
       .select({
-        budgetId: userBudget.id,
+        id: userBudget.id,
+        amount: userBudget.amount,
+        month: userBudget.month,
+        year: userBudget.year,
+        userId: userBudget.userId,
+        isActive: userBudget.isActive,
         totalBudget: userBudget.amount,
-        totalExpenses: sql<number>`COALESCE(SUM(${transaction.amount}), 0)`,
-        remainingBudget: sql<number>`${userBudget.amount} - COALESCE(SUM(${transaction.amount}), 0)`,
+        totalExpenses: sql<number>`COALESCE(SUM(CASE WHEN ${transaction.type} = 'expense' THEN ${transaction.amount} ELSE 0 END), 0)`,
+        totalIncome: sql<number>`COALESCE(SUM(CASE WHEN ${transaction.type} = 'income' THEN ${transaction.amount} ELSE 0 END), 0)`,
+        remainingBudget: sql<number>`${userBudget.amount} - COALESCE(SUM(CASE WHEN ${transaction.type} = 'expense' THEN ${transaction.amount} ELSE 0 END), 0)`,
       })
       .from(userBudget)
       .leftJoin(
         transaction,
         and(
           eq(transaction.userId, userBudget.userId),
-          eq(transaction.type, "expense"),
-          sql`strftime('%m', ${transaction.date}, 'unixepoch') = printf('%02d', ${userBudget.month})`,
-          sql`strftime('%Y', ${transaction.date}, 'unixepoch') = ${userBudget.year}`,
+          sql`${transaction.date} >= ${Math.floor(start.getTime() / 1000)}`,
+          sql`${transaction.date} <= ${Math.floor(end.getTime() / 1000)}`,
         ),
       )
       .where(
         and(
           eq(userBudget.userId, userId),
-          eq(userBudget.month, month),
-          eq(userBudget.year, year),
+          eq(userBudget.month, start.getMonth() + 1),
+          eq(userBudget.year, start.getFullYear()),
         ),
       )
       .groupBy(userBudget.id);
 
-		if (result.length === 0) {
-			return null
-		}
+    if (result.length === 0) {
+      return null;
+    }
     return result[0];
   },
 };

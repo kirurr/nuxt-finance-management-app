@@ -91,7 +91,35 @@ export const transactionRepository = {
     id: string,
     pageSize: number = 10,
     cursor?: number,
+		startDate?: Date,
+		endDate?: Date,
   ): Promise<{ items: TransactionWithCategory[]; nextCursor: number | null }> {
+		const dateFilter: SQL[] = [];
+		
+		if (startDate && endDate) {
+			// If start date equals end date, return transactions for that specific day
+			if (startDate.toDateString() === endDate.toDateString()) {
+				// Create a start of day and end of day for the same date
+				const startOfDay = new Date(startDate);
+				startOfDay.setUTCHours(0, 0, 0, 0);
+				
+				const endOfDay = new Date(startDate);
+				endOfDay.setUTCHours(23, 59, 59, 999);
+				
+				dateFilter.push(gte(transaction.date, startOfDay));
+				dateFilter.push(lte(transaction.date, endOfDay));
+			} else {
+				dateFilter.push(gte(transaction.date, startDate));
+				dateFilter.push(lte(transaction.date, endDate));
+			}
+		} else {
+			if (startDate) {
+				dateFilter.push(gte(transaction.date, startDate));
+			}
+			if (endDate) {
+				dateFilter.push(lte(transaction.date, endDate));
+			}
+		}
     const rows = await db
       .select({
         transaction: transaction,
@@ -110,6 +138,7 @@ export const transactionRepository = {
         and(
           eq(transaction.userId, id),
           cursor ? gt(transaction.id, cursor) : undefined,
+					...dateFilter,
         ),
       )
       .limit(pageSize + 1)

@@ -4,6 +4,8 @@ import queryKeys from "~/lib/query-keys";
 
 const { $orpc } = useNuxtApp();
 
+const dateStore = useDateStore();
+
 const {
   data,
   isPending,
@@ -12,11 +14,17 @@ const {
   fetchNextPage,
   isFetchingNextPage,
 } = useInfiniteQuery({
-  queryKey: [...queryKeys.transactions],
+	queryKey: computed(() => [
+		...queryKeys.transactions,
+		dateStore.startDateStr,
+		dateStore.endDateStr,
+	]),
   initialPageParam: 0,
   queryFn: async ({ pageParam }) =>
     await $orpc.transaction.getTransactionsByUserId.call({
       cursor: pageParam,
+			startDate: dateStore.startDate.toDate(),
+			endDate: dateStore.endDate?.toDate() ?? dateStore.startDate.toDate(),
     }),
   getNextPageParam: (lastPage) => lastPage.nextCursor,
 });

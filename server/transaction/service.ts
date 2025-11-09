@@ -10,10 +10,14 @@ import type {
 
 export const transactionService = {
   async createTransaction(data: CreateTransaction): Promise<Transaction> {
+    // Create start and end dates for the month of the transaction
+    const start = new Date(data.date.getFullYear(), data.date.getMonth(), 1);
+    const end = new Date(data.date.getFullYear(), data.date.getMonth() + 1, 0, 23, 59, 59);
+    
     const budgetInfo = await userBudgetService.calculateUserBudget(
       data.userId,
-      data.date.getMonth() + 1,
-      data.date.getFullYear(),
+      start,
+      end,
     );
     if (budgetInfo) {
       const sign = data.type === "expense" ? -1 : 1;
@@ -53,11 +57,15 @@ export const transactionService = {
     id: string,
     pageSize?: number,
     cursor?: number,
+		startDate?: Date,
+		endDate?: Date,
   ): Promise<{ items: TransactionWithCategory[]; nextCursor: number | null }> {
     return await transactionRepository.getTransactionsByUserId(
       id,
       pageSize,
       cursor,
+			startDate,
+			endDate,
     );
   },
   async deleteTransaction(id: number): Promise<void> {

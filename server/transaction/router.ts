@@ -29,6 +29,8 @@ export const transactionRouter = {
       z.object({
         pageSize: z.number().optional(),
         cursor: z.number().optional(),
+				startDate: z.date().optional(),
+				endDate: z.date().optional(),
       }),
     )
     .handler(
@@ -43,6 +45,8 @@ export const transactionRouter = {
           context.user.id,
           input.pageSize,
           input.cursor,
+					input.startDate,
+					input.endDate,
         );
       },
     ),
