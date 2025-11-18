@@ -8,7 +8,6 @@ import { ref } from "vue";
 import { z } from "zod";
 
 const errorRef = ref("");
-const isLoadingRef = ref<boolean>(false);
 
 async function handleSignUp({
   name,
@@ -19,14 +18,12 @@ async function handleSignUp({
   email: string;
   password: string;
 }) {
-  isLoadingRef.value = true;
   const { error } = await authClient.signUp.email({
     callbackURL: "/",
     name: name,
     email: email,
     password: password,
   });
-  isLoadingRef.value = false;
   if (error) {
     errorRef.value = error.message ?? "Unknown error";
     return;
@@ -44,8 +41,8 @@ const form = useForm({
 </script>
 
 <template>
-  <div>
     <form @submit.prevent.stop="form.handleSubmit">
+		<FieldGroup>
       <form.Field
         name="name"
         :validators="{
@@ -59,6 +56,7 @@ const form = useForm({
               :id="field.name"
               v-model="field.state.value"
               :name="field.name"
+							placeholder="John Doe"
               @blur="field.handleBlur"
               @input="(e: any) => field.handleChange(e.target.value)"
             />
@@ -82,6 +80,7 @@ const form = useForm({
               v-model="field.state.value"
               :name="field.name"
               type="email"
+							placeholder="example@email.com"
               @blur="field.handleBlur"
               @input="(e: any) => field.handleChange(e.target.value)"
             />
@@ -105,6 +104,7 @@ const form = useForm({
               v-model="field.state.value"
               :name="field.name"
               type="password"
+							placeholder="********"
               @blur="field.handleBlur"
               @input="(e: any) => field.handleChange(e.target.value)"
             />
@@ -114,10 +114,16 @@ const form = useForm({
           </Field>
         </template>
       </form.Field>
-      <Field>
-        <Button :disabled="isLoadingRef">Sign up</Button>
-        <FieldError>{{ errorRef }}</FieldError>
-      </Field>
+        <Field>
+          <form.Subscribe>
+            <template #default="{ canSubmit, isSubmitting }">
+              <Button type="submit" :disabled="!canSubmit">
+                {{ isSubmitting ? "..." : "Sign in" }}
+              </Button>
+            </template>
+          </form.Subscribe>
+          <FieldError>{{ errorRef }}</FieldError>
+        </Field>
+			</FieldGroup>
     </form>
-  </div>
 </template>

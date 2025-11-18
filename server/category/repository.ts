@@ -4,27 +4,35 @@ import { color, icon, transactionCategory } from "../db/schema";
 import type {
   CategoryWithIconAndColor,
   CreateTransactionCategory,
-  TransactionCategory,
   UpdateTransactionCategory,
 } from "./schema";
 
 export const transactionCategoryRepository = {
   async createTransactionCategory(
     data: CreateTransactionCategory,
-  ): Promise<TransactionCategory> {
-    return (await db.insert(transactionCategory).values(data).returning())[0];
+  ): Promise<CategoryWithIconAndColor> {
+    const returning = (
+      await db
+        .insert(transactionCategory)
+        .values(data)
+        .returning({ id: transactionCategory.id })
+    )[0];
+
+    return await this.getTransactionCategory(returning.id);
   },
   async updateTransactionCategory(
     id: number,
     data: UpdateTransactionCategory,
-  ): Promise<TransactionCategory> {
-    return (
+  ): Promise<CategoryWithIconAndColor> {
+    const returning = (
       await db
         .update(transactionCategory)
         .set(data)
         .where(eq(transactionCategory.id, id))
-        .returning()
+        .returning({ id: transactionCategory.id })
     )[0];
+
+    return await this.getTransactionCategory(returning.id);
   },
   async getTransactionCategory(id: number): Promise<CategoryWithIconAndColor> {
     const row = (

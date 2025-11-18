@@ -5,19 +5,20 @@ import {
   updateTransactionSchema,
   type Transaction,
   type TransactionWithCategory,
+  type CategoryTransactionCount,
 } from "./schema";
 import { transactionService } from "./service";
 
 export const transactionRouter = {
   createTransaction: authed
-    .input(createTransactionSchema)
-    .handler(async ({ input }): Promise<Transaction> => {
-      return await transactionService.createTransaction(input);
+    .input(createTransactionSchema.omit({ userId: true }))
+    .handler(async ({ input, context }): Promise<TransactionWithCategory> => {
+      return await transactionService.createTransaction({ ...input, userId: context.user.id });
     }),
   updateTransaction: authed
     .input(updateTransactionSchema)
-    .handler(async ({ input }): Promise<Transaction> => {
-      return await transactionService.updateTransaction(input.id, input);
+    .handler(async ({ input, context }): Promise<TransactionWithCategory> => {
+      return await transactionService.updateTransaction(input.id, { ...input, userId: context.user.id });
     }),
   getTransaction: authed
     .input(z.number())
@@ -27,29 +28,17 @@ export const transactionRouter = {
   getTransactionsByUserId: authed
     .input(
       z.object({
-        pageSize: z.number().optional(),
-        cursor: z.number().optional(),
-				startDate: z.date().optional(),
-				endDate: z.date().optional(),
+        startDate: z.date().optional(),
+        endDate: z.date().optional(),
       }),
     )
-    .handler(
-      async ({
-        context,
-        input,
-      }): Promise<{
-        items: TransactionWithCategory[];
-        nextCursor: number | null;
-      }> => {
-        return await transactionService.getTransactionsByUserId(
-          context.user.id,
-          input.pageSize,
-          input.cursor,
-					input.startDate,
-					input.endDate,
-        );
-      },
-    ),
+    .handler(async ({ context, input }): Promise<TransactionWithCategory[]> => {
+      return await transactionService.getTransactionsByUserId(
+        context.user.id,
+        input.startDate,
+        input.endDate,
+      );
+    }),
 
   deleteTransaction: authed
     .input(z.number())
@@ -69,4 +58,23 @@ export const transactionRouter = {
         input.month,
       );
     }),
+
+  groupTransactionsByCategory: authed
+    .input(
+      z
+        .object({
+          startDate: z.date().optional(),
+          endDate: z.date().optional(),
+        })
+        .optional(), // Optional input object so users can call without dates if they want
+    )
+    .handler(
+      async ({ context, input }): Promise<CategoryTransactionCount[]> => {
+        return await transactionService.groupTransactionsByCategory(
+          context.user.id,
+          input?.startDate,
+          input?.endDate,
+        );
+      },
+    ),
 };

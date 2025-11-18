@@ -1,35 +1,20 @@
 <script setup lang="ts">
-import { useMutation } from "@tanstack/vue-query";
 import type {
   TransactionCategory,
   CategoryFormData,
 } from "~~/server/category/schema";
-import queryKeys from "~/lib/query-keys";
 
 const { closeDialog, categoryData } = defineProps<{
   closeDialog: () => void;
   categoryData: TransactionCategory;
 }>();
 
-const session = authClient.useSession();
-const { $orpc } = useNuxtApp();
+const { updateMutation } = useCategories();
 
-const mutation = useMutation({
-  mutationFn: async (data: CategoryFormData) => {
-    await $orpc.category.updateCategory.call({
-      ...data,
-      id: categoryData.id,
-      iconId: Number(data.iconId),
-      colorId: Number(data.colorId),
-      userId: session.value!.data!.user.id,
-    });
-  },
-  mutationKey: [...queryKeys.categories],
-  onSuccess: async (_, __, ___, context) => {
-    await context.client.invalidateQueries({ queryKey: [...queryKeys.categories] });
-    closeDialog();
-  },
-});
+async function handleSubmit(data: CategoryFormData) {
+  await updateMutation.mutateAsync({ id: categoryData.id, data });
+	closeDialog();
+}
 
 const defaultValues: CategoryFormData = {
   name: categoryData.name,
@@ -42,7 +27,7 @@ const defaultValues: CategoryFormData = {
   <div>
     <CategoryForm
       :default-values="defaultValues"
-      :action="mutation.mutateAsync"
+      :action="handleSubmit"
     />
   </div>
 </template>

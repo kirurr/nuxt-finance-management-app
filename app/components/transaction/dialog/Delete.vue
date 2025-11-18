@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import type { Transaction } from "~~/server/transaction/schema";
+import { Trash2 } from "lucide-vue-next";
+
 const { transactionData } = defineProps<{
   transactionData: Transaction;
 }>();
@@ -22,7 +24,7 @@ const isOpen = ref(false);
 <template>
   <AlertDialog v-model:open="isOpen">
     <AlertDialogTrigger as-child>
-      <Button variant="outline"> Delete </Button>
+      <Button variant="outline" size="icon"><Trash2 /></Button>
     </AlertDialogTrigger>
     <AlertDialogContent>
       <AlertDialogHeader>

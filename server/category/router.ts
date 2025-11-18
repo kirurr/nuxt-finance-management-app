@@ -3,20 +3,20 @@ import { authed } from "../orpc";
 import {
   type CategoryWithIconAndColor,
   createTransactionCategorySchema,
-  updateTransactionCategorySchema,
-  type TransactionCategory} from "./schema";
+  updateTransactionCategorySchema
+} from "./schema";
 
 import { transactionCategoryService } from "./service";
 
 export const transactionCategoryRouter = {
   createCategory: authed
-    .input(createTransactionCategorySchema)
-    .handler(async ({ input }): Promise<TransactionCategory> => {
-      return await transactionCategoryService.createTransactionCategory(input);
+    .input(createTransactionCategorySchema.omit({ userId: true }))
+    .handler(async ({ input, context }): Promise<CategoryWithIconAndColor> => {
+      return await transactionCategoryService.createTransactionCategory({ ...input, userId: context.user.id });
     }),
   updateCategory: authed
     .input(updateTransactionCategorySchema)
-    .handler(async ({ input }): Promise<TransactionCategory> => {
+    .handler(async ({ input }): Promise<CategoryWithIconAndColor> => {
       return await transactionCategoryService.updateTransactionCategory(
         input.id,
         input,

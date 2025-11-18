@@ -6,8 +6,7 @@ import { useForm } from "@tanstack/vue-form";
 import type { TransactionFormData } from "~~/server/transaction/schema";
 import { z } from "zod";
 import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
-import { useQuery } from "@tanstack/vue-query";
-import queryKeys from "~/lib/query-keys";
+import { colord } from "colord";
 
 interface Props {
   action: (data: TransactionFormData) => Promise<void>;
@@ -34,13 +33,8 @@ const form = useForm({
 const minDate = new CalendarDate(1900, 1, 1);
 const maxDate = today(getLocalTimeZone());
 
-const { $orpc } = useNuxtApp();
+const { categories } = useCategories();
 
-const categories = useQuery({
-  queryKey: [...queryKeys.categories],
-  queryFn: async () =>
-    await $orpc.category.getCategories.call(),
-});
 </script>
 
 <template>
@@ -186,7 +180,7 @@ const categories = useQuery({
                 v-for="category in categories.data?.value"
                 :key="category.id"
                 class="flex items-center justify-between p-3 border rounded-md"
-                :style="{ backgroundColor: category.color?.hex }"
+                :style="{ backgroundColor: colord(category.color?.color ?? '').toRgbString() }"
               >
                 <div class="flex items-center space-x-3">
                   <RadioGroupItem

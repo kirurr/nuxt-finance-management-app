@@ -1,8 +1,13 @@
 // @ts-check
 import pluginVueA11y from "eslint-plugin-vuejs-accessibility";
-import withNuxt from './.nuxt/eslint.config.mjs'
+import withNuxt from "./.nuxt/eslint.config.mjs";
 
 export default withNuxt(
   // Your custom configs here
-	...pluginVueA11y.configs["flat/recommended"],
-)
+  ...pluginVueA11y.configs["flat/recommended"],
+  {
+    rules: {
+      "vue/no-multiple-template-root": "off",
+    },
+  },
+);

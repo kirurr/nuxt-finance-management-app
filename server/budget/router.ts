@@ -14,7 +14,7 @@ export const budgetRouter = {
     }),
 
   createUserBudget: authed
-    .input(createUserBudgetSchema)
+    .input(createUserBudgetSchema.omit({ userId: true }))
     .handler(async ({ input, context }) => {
       return await userBudgetService.createUserBudget({
         ...input,
@@ -23,7 +23,7 @@ export const budgetRouter = {
     }),
 
   updateUserBudget: authed
-    .input(updateUserBudgetSchema)
+    .input(updateUserBudgetSchema.omit({ userId: true }))
     .handler(async ({ input, context }) => {
       return await userBudgetService.updateUserBudget({
         ...input,
@@ -39,7 +39,7 @@ export const budgetRouter = {
       }),
     )
     .handler(async ({ input, context }) => {
-			let end = input.end;
+      let end = input.end;
       if (!end) {
         end = new Date(input.start.getTime());
         end.setMonth(end.getMonth() + 1);
@@ -48,7 +48,7 @@ export const budgetRouter = {
       return await userBudgetService.calculateUserBudget(
         context.user.id,
         input.start,
-				end
+        end,
       );
     }),
 };

@@ -8,6 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import type { UserBudget } from "~~/server/budget/schema";
+import { Pencil } from "lucide-vue-next";
 
 const { data } = defineProps<{
   data: UserBudget;
@@ -19,7 +20,7 @@ const isOpen = ref(false);
 <template>
   <Dialog v-model:open="isOpen">
     <DialogTrigger as-child>
-      <Button variant="outline">Update your budget</Button>
+      <Button variant="outline"><Pencil />Update budget</Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>

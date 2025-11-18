@@ -8,6 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import type { Transaction } from "~~/server/transaction/schema";
+import { Pencil } from "lucide-vue-next";
 
 const { transactionData } = defineProps<{
   transactionData: Transaction;
@@ -19,7 +20,7 @@ const isOpen = ref(false);
 <template>
   <Dialog v-model:open="isOpen">
     <DialogTrigger as-child>
-      <Button variant="outline">Update transaction</Button>
+      <Button variant="outline" size="icon"><Pencil /></Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>

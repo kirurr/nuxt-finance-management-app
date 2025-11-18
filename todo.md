@@ -1,5 +1,2 @@
-- [ ] transactions form
-> - [ ] category select
-> - [ ] category form
-
-- [x] transactions list
+# TODO
+    rework charts to new shadcn components

@@ -1,40 +1,48 @@
 <script setup lang="ts">
-import { useQuery } from "@tanstack/vue-query";
-import queryKeys from "~/lib/query-keys";
+import { useTransactions } from '~/composables/transactions/useTransactions';
 
-const { $orpc } = useNuxtApp();
 
-const dateStore = useDateStore();
+const { transactions } = useTransactions();
+const { data: transactionsData } = transactions;
 
-const { isPending, data } = useQuery({
-  queryKey: computed(() => [
-    ...queryKeys.budget,
-    dateStore.startDateStr,
-    dateStore.endDateStr,
-  ]),
-  queryFn: async () => {
-    return await $orpc.budget.calculateUserBudget.call({
-      start: dateStore.startDate.toDate(),
-      end: dateStore.endDate?.toDate() ?? undefined,
-    });
-  },
+const { budget } = useBudget();
+const { isPending, data } = budget;
+
+const totalExpenses = computed(() => {
+  return transactionsData.value?.reduce((total, transaction) => {
+    if (transaction.type === "expense") {
+      return total + transaction.amount;
+    }
+    return total;
+  }, 0);
+});
+
+const totalIncome = computed(() => {
+  return transactionsData.value?.reduce((total, transaction) => {
+    if (transaction.type === "income") {
+      return total + transaction.amount;
+    }
+    return total;
+  }, 0);
+});
+
+const remainingBudget = computed(() => {
+  return (data.value?.amount ?? 0) - (totalExpenses.value ?? 0);
 });
 </script>
 
 <template>
   <div v-if="isPending">Loading...</div>
-  <div v-else>
-    <div>
-      <div>total: {{ data?.amount }} </div>
-      <div>spend: {{ data?.totalExpenses }} </div>
-			<div>income: {{ data?.totalIncome }}</div>
-			<div>remaining: {{ data?.remainingBudget }}</div>
-		</div>
-    <div v-if="data">
+  <div v-else class="flex flex-row gap-2">
+      <div>total: {{ data?.amount }}</div>
+      <div>spend: {{ totalExpenses }}</div>
+      <div>income: {{ totalIncome }}</div>
+      <div>remaining: {{ remainingBudget }}</div>
+    <template v-if="data">
       <BudgetDialogUpdate :data="data" />
-    </div>
-    <div v-else>
+    </template>
+    <template v-else>
       <BudgetDialogCreate />
-    </div>
+    </template>
   </div>
 </template>

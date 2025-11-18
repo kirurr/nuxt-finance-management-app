@@ -7,11 +7,15 @@ export const userBudgetRepository = {
   async getUserBudgetByMonth(
     userId: string,
     month: number,
-  ): Promise<UserBudget> {
+  ): Promise<UserBudget | null> {
     const items = await db
       .select()
       .from(userBudget)
       .where(and(eq(userBudget.userId, userId), eq(userBudget.month, month)));
+
+		if (items.length === 0) {
+			return null;
+		}
 
     return items[0];
   },

@@ -9,7 +9,7 @@ import type { TransactionCategory } from "../category/schema";
 import type { Icon } from "../icon/schema";
 import z from "zod";
 import type { Color } from "../color/schema";
-import { AllString } from "../utils";
+import type { AllString } from "../utils";
 
 export const transactionSchema = createSelectSchema(transaction);
 
@@ -32,4 +32,9 @@ export type UpdateTransaction = z.infer<typeof updateTransactionSchema>;
 
 export type TransactionWithCategory = Transaction & {
   category: (TransactionCategory & { icon: Icon | null; color: Color | null }) | null; // null if no category is set
+};
+
+export type CategoryTransactionCount = {
+  category: (TransactionCategory & { icon: Icon | null; color: Color | null }) | null; // null if no category is set
+  count: number;
 };

@@ -13,12 +13,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  modules: [
-		"shadcn-nuxt",
-		"@nuxt/eslint",
-		"@nuxt/image",
-		"@pinia/nuxt",
-	],
+  modules: ["shadcn-nuxt", "@nuxt/eslint", "@nuxt/image", "@pinia/nuxt"],
   shadcn: {
     /**
      * Prefix for all the imported component

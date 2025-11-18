@@ -149,5 +149,5 @@ export const icon = sqliteTable("icon", {
 
 export const color = sqliteTable("color", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  hex: text("hex").notNull(),
+  color: text("color").notNull(),
 });

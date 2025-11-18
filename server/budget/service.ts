@@ -5,7 +5,7 @@ export const userBudgetService = {
   async getUserBudgetByMonth(
     userId: string,
     month: number,
-  ): Promise<UserBudget> {
+  ): Promise<UserBudget | null> {
     return await userBudgetRepository.getUserBudgetByMonth(userId, month);
   },
   async createUserBudget(data: CreateUserBudget): Promise<UserBudget> {

@@ -1,31 +1,24 @@
 <script setup lang="ts">
-import { useMutation } from "@tanstack/vue-query";
-import type { Transaction } from "~~/server/transaction/schema";
-import queryKeys from "~/lib/query-keys";
+import { useTransactions } from "~/composables/transactions/useTransactions";
+import type {
+  Transaction,
+} from "~~/server/transaction/schema";
 
 const { closeDialog, transactionData } = defineProps<{
   closeDialog: () => void;
   transactionData: Transaction;
 }>();
-const { $orpc } = useNuxtApp();
+const { deleteMutation } = useTransactions();
+const { isPending } = deleteMutation;
 
-const { mutateAsync, isPending } = useMutation({
-  mutationFn: async () => {
-    await $orpc.transaction.deleteTransaction.call(transactionData.id);
-  },
-  mutationKey: [...queryKeys.transactions],
-  onSuccess: async (_, __, ___, context) => {
-    await context.client.invalidateQueries({
-      queryKey: [...queryKeys.transactions],
-      exact: false,
-    });
-    closeDialog();
-  },
-});
+async function handleSubmit() {
+  await deleteMutation.mutateAsync(transactionData.id);
+	closeDialog();
+}
 </script>
 
 <template>
-  <Button variant="destructive" :disabled="isPending" @click="mutateAsync"
+  <Button variant="destructive" :disabled="isPending" @click="handleSubmit"
     >Delete transaction</Button
   >
 </template>
