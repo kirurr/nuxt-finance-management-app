@@ -144,6 +144,6 @@
 
 @layer components {
   .nav-link {
-    @apply rounded-md p-1 outline-none text-gray-900 text-xl font-semibold underline underline-offset-2 hover:text-gray-600 transition-all focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px];
+    @apply rounded-md p-1 outline-none text-gray-900 text-xl font-semibold hover:decoration-gray-900 decoration-transparent underline underline-offset-2 hover:text-gray-600 transition-all focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px];
   }
 }

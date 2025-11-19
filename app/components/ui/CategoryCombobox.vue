@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { CheckIcon, ChevronsUpDownIcon } from "lucide-vue-next";
+import { ChevronsUpDownIcon } from "lucide-vue-next";
+import CategoryComboboxItem from "~/components/ui/CategoryComboboxItem.vue";
 import { ref, watch } from "vue";
 
 interface Item {
@@ -8,7 +9,7 @@ interface Item {
 }
 
 const props = defineProps<{
-	id?: string;
+  id?: string;
   modelValue: string;
   data: Item[];
 }>();
@@ -35,26 +36,33 @@ watch(internalValue, (v) => {
   emit("update:modelValue", v);
 });
 
-const inputId = computed(() => props.id ?? 'items-select')
+const { categories } = useCategories();
+const { data: categoriesData } = categories;
+
+const inputId = computed(() => props.id ?? "items-select");
 </script>
 
 <template>
   <Popover v-model:open="open">
-    <PopoverTrigger
-			as-child>
+    <PopoverTrigger as-child>
       <Button
-				:id="inputId"
+        :id="inputId"
         variant="outline"
         role="combobox"
         :aria-expanded="open"
         :aria-controls="'items-popover'"
         class="w-[200px] justify-between"
       >
-        {{
-          internalValue
-            ? extendedData.find((f) => f.value === internalValue)?.label
-            : "Select category..."
-        }}
+        <template v-if="internalValue">
+          <span class="font-normal">{{
+            extendedData.find((f) => f.value === internalValue)?.label
+          }}</span>
+        </template>
+        <template v-else>
+          <span class="text-muted-foreground font-normal"
+            >Select category...</span
+          >
+        </template>
         <ChevronsUpDownIcon class="ml-2 h-4 w-4 shrink-0 opacity-50" />
       </Button>
     </PopoverTrigger>
@@ -64,11 +72,12 @@ const inputId = computed(() => props.id ?? 'items-select')
         <CommandList>
           <CommandEmpty>No category found.</CommandEmpty>
           <CommandGroup>
-            <CommandItem
+            <CategoryComboboxItem
               v-for="item in extendedData"
               :key="item.value"
-              class="hover:bg-accent"
-              :value="item.value"
+              :item="item"
+              :is-selected="internalValue === item.value"
+							:category="categoriesData?.find((c) => c.id === parseInt(item.value))"
               @select="
                 () => {
                   internalValue =
@@ -76,15 +85,7 @@ const inputId = computed(() => props.id ?? 'items-select')
                   open = false;
                 }
               "
-            >
-              <CheckIcon
-                class="mr-2 h-4 w-4"
-                :class="
-                  internalValue === item.value ? 'opacity-100' : 'opacity-0'
-                "
-              />
-              {{ item.label }}
-            </CommandItem>
+            />
           </CommandGroup>
         </CommandList>
       </Command>

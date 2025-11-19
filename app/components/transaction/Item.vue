@@ -5,12 +5,17 @@ import { colord } from "colord";
 const { data } = defineProps<{
   data: TransactionWithCategory;
 }>();
+
+const isHaveCategory = computed(() => data.category);
+console.log(isHaveCategory.value);
+console.log(data);
 </script>
 
 <template>
-  <Card class="shadow-none flex flex-row p-2 bg bg-gray-100">
+  <Card class="shadow-none flex flex-row p-2 bg bg-gray-100 items-center">
     <div class="relative flex items-center rounded-md size-12">
       <span
+				v-if="isHaveCategory"
         class="size-full rounded-md relative z-10"
         :style="{
           backgroundColor: colord(data.category?.color?.color ?? '')
@@ -26,6 +31,7 @@ const { data } = defineProps<{
         }"
       />
       <span
+				v-if="isHaveCategory"
         class="size-full rounded-md absolute"
         :style="{
           backgroundColor: colord(data.category?.color?.color ?? '')

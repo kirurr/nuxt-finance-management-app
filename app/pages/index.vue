@@ -144,5 +144,5 @@ const progressData = computed(() =>
     </div>
   </section>
 
-	<TransactionSection />
+  <TransactionSection />
 </template>

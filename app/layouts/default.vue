@@ -10,5 +10,4 @@ useCategories();
 	<main class="p-4 rounded-md bg-gray-100 my-8">
 		<slot />
 	</main>
-	<footer>footer</footer>
 </template>

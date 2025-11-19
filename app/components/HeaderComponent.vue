@@ -7,7 +7,7 @@ import NotificationsPopover from "~/components/notifications/Popover.vue";
     <nav>
       <ul class="flex flex-row gap-4">
         <li>
-          <NuxtLink tabindex="0" to="/" class="nav-link"> Expenses </NuxtLink>
+          <NuxtLink tabindex="0" to="/" class="nav-link"> Budget </NuxtLink>
         </li>
         <li class="ml-auto flex flex-row gap-4">
 					<TransactionDialogCreate />
