@@ -10,7 +10,7 @@ const isHaveCategory = computed(() => data.category);
 </script>
 
 <template>
-  <Card class="shadow-none flex flex-row p-2 bg bg-gray-100 items-center">
+  <Card class="flex flex-row p-2 bg items-center bg-bg/50">
     <div class="relative flex items-center rounded-md size-12">
       <span
 				v-if="isHaveCategory"
@@ -46,7 +46,7 @@ const isHaveCategory = computed(() => data.category);
           class="bg-destructive/10 text-destructive"
           >Expense</Badge
         >
-        <Badge v-if="data.type === 'income'" class="bg-success/10 text-success"
+        <Badge v-if="data.type === 'income'" class="bg-success/10 text-success-foreground"
           >Income</Badge
         >
       </div>

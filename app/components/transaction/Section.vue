@@ -67,14 +67,12 @@ const form = useForm({
     transactionsData.value = filteredTransactions;
   },
 });
-
-//TODO: handle colors, handle without category items
 </script>
 
 <template>
   <section class="mt-12" labeledby="transactions">
-    <Card class="p-4 rounded-md bg-gray-200 my-8">
-      <div class="mb-4 flex flex-row justify-between items-center">
+    <Card class="p-4 rounded-md my-8">
+      <div class="flex flex-row justify-between items-center">
         <div>
           <h2 id="transactions" class="text-3xl font-bold">Transactions</h2>
           <p class="text-lg text-muted-foreground">Transactions list</p>
@@ -89,7 +87,7 @@ const form = useForm({
       <Collapsible v-model:open="isFiltersOpen">
         <CollapsibleContent>
           <form
-            class="p-2 bg-gray-100 rounded-md"
+            class="p-2 rounded-md"
             @submit.prevent.stop="form.handleSubmit"
           >
             <FieldGroup class="grid grid-cols-3 gap-4 items-center">
@@ -120,7 +118,7 @@ const form = useForm({
                       <Input
                         id="min-price-filter"
                         v-model="field.state.value"
-                        class="bg-white"
+                        class="bg-background"
                         aria-label="Min price filter"
                         :name="field.name"
                         type="number"
@@ -137,7 +135,7 @@ const form = useForm({
                       <Input
                         id="max-price-filter"
                         v-model="field.state.value"
-                        class="bg-white"
+                        class="bg-background"
                         aria-label="Max price filter"
                         :name="field.name"
                         type="number"

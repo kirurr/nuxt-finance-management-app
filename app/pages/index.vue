@@ -43,7 +43,7 @@ const progressData = computed(() =>
     </div>
 
     <section labeledby="monthly-budget">
-      <Card class="p-6 rounded-md bg-gray-200">
+      <Card class="p-6 rounded-md">
         <div class="flex flex-row justify-between">
           <div>
             <h3
@@ -93,7 +93,7 @@ const progressData = computed(() =>
     </section>
 
     <div class="flex flex-row gap-4">
-      <Card class="p-6 rounded-md bg-gray-200 my-8 w-full">
+      <Card class="p-6 rounded-md my-8 w-full">
         <TransactionChart title="Expenses" type="expense">
           <template #icon>
             <div class="rounded-md bg-red-200/50 p-2 text-red-600">
@@ -102,7 +102,7 @@ const progressData = computed(() =>
           </template>
         </TransactionChart>
       </Card>
-      <Card class="p-6 rounded-md bg-gray-200 my-8 w-full">
+      <Card class="p-6 rounded-md my-8 w-full">
         <TransactionChart title="Income" type="income">
           <template #icon>
             <div class="rounded-md bg-green-200/50 p-2 text-green-600">
@@ -115,7 +115,7 @@ const progressData = computed(() =>
 
     <div class="flex flex-row w-full gap-4">
       <section labeledby="monthly-income" class="flex-1">
-        <Card class="p-6 rounded-md bg-gray-200">
+        <Card class="p-6 rounded-md">
           <h3 id="monthly-income">Monthly income</h3>
           <p class="text-2xl font-bold">
             {{ monthBudgetInfo.data.value?.totalIncome }}
@@ -123,7 +123,7 @@ const progressData = computed(() =>
         </Card>
       </section>
       <section labeledby="monthly-expenses" class="flex-1">
-        <Card class="p-6 rounded-md bg-gray-200">
+        <Card class="p-6 rounded-md">
           <h3 id="monthly-expenses">Monthly expenses</h3>
           <p class="text-2xl font-bold">
             {{ monthBudgetInfo.data.value?.totalExpenses }}
@@ -131,7 +131,7 @@ const progressData = computed(() =>
         </Card>
       </section>
       <section labeledby="monthly-profit" class="flex-1">
-        <Card class="p-6 rounded-md bg-gray-200">
+        <Card class="p-6 rounded-md">
           <h3 id="monthly-profit">Monthly profit</h3>
           <p class="text-2xl font-bold">
             {{

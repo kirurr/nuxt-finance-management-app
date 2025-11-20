@@ -8,7 +8,7 @@ const { data } = defineProps<{
 
 <template>
   <ScrollArea class="max-h-[700px] overflow-y-auto">
-    <ul  class="space-y-4">
+    <ul  class="space-y-4 pr-4">
       <li
         v-for="(transaction, index) in data"
         :key="index"

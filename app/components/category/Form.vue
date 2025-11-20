@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/vue-query";
 import { z } from "zod";
 import type { CategoryFormData } from "~~/server/category/schema";
 import queryKeys from "~/lib/query-keys";
+import { colord } from "colord";
 
 interface Props {
   action: (data: CategoryFormData) => Promise<void>;
@@ -54,9 +55,9 @@ const colors = useQuery({
       >
         <template #default="{ field }">
           <Field>
-            <FieldLabel :for="field.name">Name</FieldLabel>
+            <FieldLabel :for="`category-field-${field.name}`">Name</FieldLabel>
             <Input
-              :id="field.name"
+              :id="`category-field-${field.name}`"
               v-model="field.state.value"
               required
               :name="field.name"
@@ -72,94 +73,130 @@ const colors = useQuery({
           </Field>
         </template>
       </form.Field>
-      <form.Field
-        name="iconId"
-        :validators="{
-          onChange: z.string().min(1, 'Must pick an icon'),
-        }"
-      >
-        <template #default="{ field }">
-          <Field>
-            <FieldLabel :for="field.name">Icon</FieldLabel>
-            <Select
-              :id="field.name"
-              v-model="field.state.value"
-              :name="field.name"
-              :aria-invalid="!field.state.meta.isValid"
-              @blur="field.handleBlur"
-              @update:model-value="
-                (val) => field.handleChange(val?.toString() ?? '')
-              "
-            >
-              <SelectTrigger>
-                <SelectValue>
-									<template v-if="field.state.value">
-										{{ field.state.value }}
-									</template>
-									<template v-else>
-										Pick icon
-									</template>
-								</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem
-                  v-for="icon in icons.data?.value ?? []"
-                  :key="icon.id"
-                  :value="icon.id.toString()"
-                  >{{ icon.name }}</SelectItem
-                >
-              </SelectContent>
-            </Select>
-            <FieldError>{{
-              field.state.meta.errors.map((e) => e?.message).join(", ")
-            }}</FieldError>
-          </Field>
-        </template>
-      </form.Field>
-      <form.Field
-        name="colorId"
-        :validators="{
-          onChange: z.string().min(1, 'Must select a color'),
-        }"
-      >
-        <template #default="{ field }">
-          <Field>
-            <FieldLabel :for="field.name">Color</FieldLabel>
-            <Select
-              :id="field.name"
-              v-model="field.state.value"
-              :name="field.name"
-              :aria-invalid="!field.state.meta.isValid"
-              @blur="field.handleBlur"
-              @update:model-value="
-                (val) => field.handleChange(val?.toString() ?? '')
-              "
-            >
-              <SelectTrigger>
-                <SelectValue>
-									<template v-if="field.state.value">
-										{{ field.state.value }}
-									</template>
-									<template v-else>
-										Pick color
-									</template>
-								</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem
-                  v-for="color in colors.data?.value ?? []"
-                  :key="color.id"
-                  :value="color.id.toString()"
-                  >{{ color.color }}</SelectItem
-                >
-              </SelectContent>
-            </Select>
-            <FieldError>{{
-              field.state.meta.errors.map((e) => e?.message).join(", ")
-            }}</FieldError>
-          </Field>
-        </template>
-      </form.Field>
+      <div class="flex flex-row gap-2">
+        <form.Field
+          name="iconId"
+          :validators="{
+            onChange: z.string().min(1, 'Must pick an icon'),
+          }"
+        >
+          <template #default="{ field }">
+            <Field>
+              <FieldLabel :for="`category-field-${field.name}`"
+                >Icon</FieldLabel
+              >
+              <Select
+                v-model="field.state.value"
+                :aria-label="`category-field-${field.name}`"
+                :name="field.name"
+                :aria-invalid="!field.state.meta.isValid"
+                @blur="field.handleBlur"
+                @update:model-value="
+                  (val) => field.handleChange(val?.toString() ?? '')
+                "
+              >
+                <SelectTrigger :id="`category-field-${field.name}`">
+                  <SelectValue>
+                    <template v-if="field.state.value">
+                      <NuxtImg
+                        class="w-8 h-8 rounded-md"
+                        :src="
+                          icons.data.value?.find(
+                            (i) => i.id.toString() === field.state.value,
+                          )?.path
+                        "
+                        :alt="`Icon ${
+                          icons.data.value?.find(
+                            (i) => i.id.toString() === field.state.value,
+                          )?.name
+                        }`"
+                      />
+                    </template>
+                    <template v-else> Pick icon </template>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem
+                    v-for="icon in icons.data?.value ?? []"
+                    :key="icon.id"
+                    :value="icon.id.toString()"
+                    >
+                      <NuxtImg
+                        class="w-8 h-8 rounded-md"
+                        :src="icon.path"
+                        :alt="`Icon ${icon.name}`"
+                      />
+									</SelectItem
+                  >
+                </SelectContent>
+              </Select>
+              <FieldError>{{
+                field.state.meta.errors.map((e) => e?.message).join(", ")
+              }}</FieldError>
+            </Field>
+          </template>
+        </form.Field>
+        <form.Field
+          name="colorId"
+          :validators="{
+            onChange: z.string().min(1, 'Must select a color'),
+          }"
+        >
+          <template #default="{ field }">
+            <Field>
+              <FieldLabel :for="`category-field-${field.name}`"
+                >Color</FieldLabel
+              >
+              <Select
+                v-model="field.state.value"
+                :aria-label="`category-field-${field.name}`"
+                :name="field.name"
+                :aria-invalid="!field.state.meta.isValid"
+                @blur="field.handleBlur"
+                @update:model-value="
+                  (val) => field.handleChange(val?.toString() ?? '')
+                "
+              >
+                <SelectTrigger :id="`category-field-${field.name}`">
+                  <SelectValue class="block w-full">
+                    <template v-if="field.state.value">
+                      <div
+                        :style="{
+                          backgroundColor: colord(
+                            colors?.data?.value?.find(
+                              (c) => c.id.toString() === field.state.value,
+                            )?.color ?? '',
+                          ).toRgbString(),
+                        }"
+                        class="w-full h-6 rounded-md"
+                      />
+                    </template>
+                    <template v-else> Pick color </template>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem
+                    v-for="color in colors.data?.value ?? []"
+                    :key="color.id"
+                    :value="color.id.toString()"
+                    class="block"
+                  >
+                    <div
+                      :style="{
+                        backgroundColor: colord(color.color).toRgbString(),
+                      }"
+                      class="w-full h-6 rounded-md"
+                    />
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <FieldError>{{
+                field.state.meta.errors.map((e) => e?.message).join(", ")
+              }}</FieldError>
+            </Field>
+          </template>
+        </form.Field>
+      </div>
       <Field>
         <form.Subscribe>
           <template #default="{ canSubmit, isSubmitting }">
