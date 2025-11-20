@@ -12,8 +12,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import type { TransactionCategory } from "~~/server/category/schema";
-const { categoryData } = defineProps<{
+import { Trash } from "lucide-vue-next";
+
+const { categoryData, className } = defineProps<{
   categoryData: TransactionCategory;
+	className?: string;
 }>();
 
 const isOpen = ref(false);
@@ -22,7 +25,7 @@ const isOpen = ref(false);
 <template>
   <AlertDialog v-model:open="isOpen">
     <AlertDialogTrigger as-child>
-      <Button variant="outline"> Delete </Button>
+      <Button :class="className" variant="ghost" size="icon"><Trash /></Button>
     </AlertDialogTrigger>
     <AlertDialogContent>
       <AlertDialogHeader>

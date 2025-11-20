@@ -15,7 +15,5 @@ async function handleSubmit(data: TransactionFormData) {
 </script>
 
 <template>
-  <div>
     <TransactionForm :action="handleSubmit" />
-  </div>
 </template>

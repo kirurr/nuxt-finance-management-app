@@ -8,9 +8,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import type { TransactionCategory } from "~~/server/category/schema";
+import { Pencil } from "lucide-vue-next";
 
-const { categoryData } = defineProps<{
+const { categoryData, className } = defineProps<{
   categoryData: TransactionCategory;
+	className?: string;
 }>();
 
 const isOpen = ref(false);
@@ -19,7 +21,7 @@ const isOpen = ref(false);
 <template>
   <Dialog v-model:open="isOpen">
     <DialogTrigger as-child>
-      <Button variant="outline">Update category</Button>
+      <Button :class="className" variant="ghost" size="icon"><Pencil /></Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>

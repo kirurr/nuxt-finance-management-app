@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { db } from "../db/db";
 import { icon, notification } from "../db/schema";
 import type {
@@ -39,7 +39,9 @@ export const notificationRepository = {
       })
       .from(notification)
       .where(eq(notification.userId, userId))
-      .leftJoin(icon, eq(notification.iconId, icon.id));
+      .leftJoin(icon, eq(notification.iconId, icon.id))
+			.orderBy(desc(notification.createdAt))
+		;
 
     const transformedItems = rows.map((row) => ({
       ...row.notification,

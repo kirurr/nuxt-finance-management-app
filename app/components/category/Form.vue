@@ -72,44 +72,91 @@ const colors = useQuery({
           </Field>
         </template>
       </form.Field>
-      <form.Field name="iconId">
+      <form.Field
+        name="iconId"
+        :validators="{
+          onChange: z.string().min(1, 'Must pick an icon'),
+        }"
+      >
         <template #default="{ field }">
           <Field>
             <FieldLabel :for="field.name">Icon</FieldLabel>
-            <RadioGroup
-              v-for="icon in icons.data?.value ?? []"
-              :key="icon.id"
-              :model-value="field.state.value"
-              @update:model-value="(val: string) => field.handleChange(val)"
+            <Select
+              :id="field.name"
+              v-model="field.state.value"
+              :name="field.name"
+              :aria-invalid="!field.state.meta.isValid"
+              @blur="field.handleBlur"
+              @update:model-value="
+                (val) => field.handleChange(val?.toString() ?? '')
+              "
             >
-              <div class="flex items-center space-x-2">
-                <RadioGroupItem :id="icon.name" :value="icon.id.toString()" />
-                <FieldLabel :for="icon.name">{{ icon.name }}</FieldLabel>
-              </div>
-            </RadioGroup>
+              <SelectTrigger>
+                <SelectValue>
+									<template v-if="field.state.value">
+										{{ field.state.value }}
+									</template>
+									<template v-else>
+										Pick icon
+									</template>
+								</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem
+                  v-for="icon in icons.data?.value ?? []"
+                  :key="icon.id"
+                  :value="icon.id.toString()"
+                  >{{ icon.name }}</SelectItem
+                >
+              </SelectContent>
+            </Select>
+            <FieldError>{{
+              field.state.meta.errors.map((e) => e?.message).join(", ")
+            }}</FieldError>
           </Field>
         </template>
       </form.Field>
-      <form.Field name="colorId">
+      <form.Field
+        name="colorId"
+        :validators="{
+          onChange: z.string().min(1, 'Must select a color'),
+        }"
+      >
         <template #default="{ field }">
           <Field>
             <FieldLabel :for="field.name">Color</FieldLabel>
-            <RadioGroup
-              v-for="color in colors.data?.value ?? []"
-              :key="color.id"
-              :model-value="field.state.value"
-              @update:model-value="(val: string) => field.handleChange(val)"
+            <Select
+              :id="field.name"
+              v-model="field.state.value"
+              :name="field.name"
+              :aria-invalid="!field.state.meta.isValid"
+              @blur="field.handleBlur"
+              @update:model-value="
+                (val) => field.handleChange(val?.toString() ?? '')
+              "
             >
-              <div class="flex items-center space-x-2">
-                <RadioGroupItem
-                  :id="`color-${color.id.toString()}`"
+              <SelectTrigger>
+                <SelectValue>
+									<template v-if="field.state.value">
+										{{ field.state.value }}
+									</template>
+									<template v-else>
+										Pick color
+									</template>
+								</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem
+                  v-for="color in colors.data?.value ?? []"
+                  :key="color.id"
                   :value="color.id.toString()"
-                />
-                <FieldLabel :for="`color-${color.id.toString()}`">{{
-                  color.hex
-                }}</FieldLabel>
-              </div>
-            </RadioGroup>
+                  >{{ color.color }}</SelectItem
+                >
+              </SelectContent>
+            </Select>
+            <FieldError>{{
+              field.state.meta.errors.map((e) => e?.message).join(", ")
+            }}</FieldError>
           </Field>
         </template>
       </form.Field>

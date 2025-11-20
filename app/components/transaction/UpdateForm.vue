@@ -28,10 +28,8 @@ const defaultValues: TransactionFormData = {
 </script>
 
 <template>
-  <div>
     <TransactionForm
       :default-values="defaultValues"
       :action="handleSubmit"
     />
-  </div>
 </template>

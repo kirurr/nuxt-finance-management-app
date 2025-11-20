@@ -21,7 +21,7 @@ const isOpen = ref(false);
         <DialogDescription> Create a new transaction </DialogDescription>
       </DialogHeader>
 
-      <TransactionCreationForm :close-dialog="() => (isOpen = false)" />
+				<TransactionCreationForm :close-dialog="() => (isOpen = false)" />
     </DialogContent>
   </Dialog>
 </template>

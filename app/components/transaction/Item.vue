@@ -7,8 +7,6 @@ const { data } = defineProps<{
 }>();
 
 const isHaveCategory = computed(() => data.category);
-console.log(isHaveCategory.value);
-console.log(data);
 </script>
 
 <template>

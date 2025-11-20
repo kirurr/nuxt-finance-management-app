@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils"
 
 interface Props {
+	id?: string
   modelValue?: string
   label?: string
   required?: boolean
@@ -59,8 +60,10 @@ const displayValue = computed(() => {
   <Popover v-model:open="open">
     <PopoverTrigger as-child>
       <Button
+				:id="props.id"
         variant="outline"
         :class="cn(
+					'hover:bg-unset hover:cursor-pointer',
           'w-full ps-3 text-start font-normal',
           !value && 'text-muted-foreground',
           props.class

@@ -39,17 +39,26 @@ export const transactionService = {
     if (budgetInfo) {
       const sign = type === "expense" ? -1 : 1;
 
-      const remainingPercent = (
-        budgetInfo.totalBudget > 0
+      const remainingPercent = Number(
+        (budgetInfo.totalBudget > 0
           ? ((budgetInfo.totalBudget -
               budgetInfo.totalExpenses +
               sign * amount) /
               budgetInfo.totalBudget) *
             100
           : 0
-      ).toFixed(0);
+        ).toFixed(0),
+      );
 
-      if (Number(remainingPercent) <= 20) {
+      if (remainingPercent <= 0) {
+        await notificationService.createNotification({
+          userId: userId,
+          name: "Warning! You used all your budget!",
+          description: "You have used all your budget!",
+          iconId: 2,
+        });
+      }
+      if (remainingPercent <= 20 && remainingPercent > 0) {
         await notificationService.createNotification({
           userId: userId,
           name: "Budget Alert",
