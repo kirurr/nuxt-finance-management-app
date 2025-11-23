@@ -13,7 +13,7 @@ const isOpen = ref(false);
 <template>
   <Dialog v-model:open="isOpen">
     <DialogTrigger as-child>
-      <Button variant="outline">Create your budget</Button>
+      <Button>Create budget</Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>

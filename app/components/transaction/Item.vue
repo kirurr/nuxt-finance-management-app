@@ -10,7 +10,7 @@ const isHaveCategory = computed(() => data.category);
 </script>
 
 <template>
-  <Card class="flex flex-row p-2 bg items-center bg-bg/50">
+  <Card class="flex flex-row p-2 bg items-center">
     <div class="relative flex items-center rounded-md size-12">
       <span
 				v-if="isHaveCategory"

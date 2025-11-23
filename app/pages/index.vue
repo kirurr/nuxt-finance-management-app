@@ -23,11 +23,14 @@ function calculatePercentages(total: number, spent: number) {
   };
 }
 
-const { budget, monthBudgetInfo, remainingBudget, totalExpenses } = useBudget();
-const { isPending, data: budgetData } = budget;
+const { budget } = useBudget();
+const { data: budgetData } = budget;
 
 const progressData = computed(() =>
-  calculatePercentages(budgetData.value?.amount ?? 0, totalExpenses.value ?? 0),
+  calculatePercentages(
+    budgetData.value?.amount ?? 0,
+    budgetData.value?.totalExpenses ?? 0,
+  ),
 );
 </script>
 <template>
@@ -37,60 +40,98 @@ const progressData = computed(() =>
         <h1 id="budget-summary" class="text-4xl font-bold mb-2">
           Budget & summary
         </h1>
-        <p class="text-lg text-muted-foreground">Lorem ipsum dolor sit amet.</p>
       </div>
       <DateSelect />
     </div>
 
     <section labeledby="monthly-budget">
       <Card class="p-6 rounded-md">
-        <div class="flex flex-row justify-between">
-          <div>
-            <h3
-              id="monthly-budget"
-              class="text-lg font-bold mb-2 text-muted-foreground"
-            >
-              Monthly budget
-            </h3>
-            <span class="text-4xl font-bold">{{
-              budgetData?.amount ?? 0
-            }}</span>
-          </div>
-          <template v-if="budgetData">
-            <BudgetDialogUpdate :data="budgetData" />
-          </template>
-          <template v-else>
-            <BudgetDialogCreate />
-          </template>
-        </div>
-        <div class="flex flex-row gap-4">
-          <div class="w-full">
-            <div class="flex flex-row items-center justify-between mb-2">
-              <span class="text-muted-foreground">Spent</span>
-              <span class="font-bold">{{ totalExpenses }}</span>
-            </div>
-            <Progress
-              id="spent-progress"
-              class="*:bg-red-500"
-              :model-value="progressData.spentPercent"
-            />
-          </div>
-          <div class="w-full">
-            <div class="flex flex-row items-center justify-between mb-2">
-              <span class="text-muted-foreground">Remaining</span>
-              <span class="font-bold">{{
-                remainingBudget > 0 ? remainingBudget : 0
+        <template v-if="budgetData">
+          <div class="flex flex-row justify-between">
+            <div>
+              <h3
+                id="monthly-budget"
+                class="text-lg font-bold mb-2 text-muted-foreground"
+              >
+                Monthly budget
+              </h3>
+              <span class="text-4xl font-bold">{{
+                budgetData?.amount ?? 0
               }}</span>
             </div>
-            <Progress
-              id="remaining-progress"
-              class="*:bg-green-500"
-              :model-value="progressData.remainingPercent"
-            />
+            <div>
+              <div class="flex flex-row items-center gap-2">
+                <BudgetDialogUpdate :data="budgetData" />
+              </div>
+            </div>
           </div>
-        </div>
+          <div class="flex flex-row gap-4">
+            <div class="w-full">
+              <div class="flex flex-row items-center justify-between mb-2">
+                <span class="text-muted-foreground">Spent</span>
+                <span class="font-bold">{{ budgetData?.totalExpenses }}</span>
+              </div>
+              <Progress
+                id="spent-progress"
+                class="*:bg-red-500"
+                :model-value="progressData.spentPercent"
+              />
+            </div>
+            <div class="w-full">
+              <div class="flex flex-row items-center justify-between mb-2">
+                <span class="text-muted-foreground">Remaining</span>
+                <span class="font-bold">{{
+                  budgetData?.remainingBudget > 0
+                    ? budgetData?.remainingBudget
+                    : 0
+                }}</span>
+              </div>
+              <Progress
+                id="remaining-progress"
+                class="*:bg-green-500"
+                :model-value="progressData.remainingPercent"
+              />
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <div class="flex flex-row items-center gap-2 justify-center min-h-40">
+            <BudgetDialogCreate />
+          </div>
+        </template>
       </Card>
     </section>
+
+    <template v-if="budgetData">
+      <div class="flex flex-row w-full gap-4 mt-10">
+        <section labeledby="monthly-income" class="flex-1">
+          <Card class="p-6 rounded-md">
+            <h3 id="monthly-income">Monthly income</h3>
+            <p class="text-2xl font-bold">
+              {{ budgetData.totalIncome }}
+            </p>
+          </Card>
+        </section>
+        <section labeledby="monthly-expenses" class="flex-1">
+          <Card class="p-6 rounded-md">
+            <h3 id="monthly-expenses">Monthly expenses</h3>
+            <p class="text-2xl font-bold">
+              {{ budgetData.totalExpenses }}
+            </p>
+          </Card>
+        </section>
+        <section labeledby="monthly-profit" class="flex-1">
+          <Card class="p-6 rounded-md">
+            <h3 id="monthly-profit">Monthly profit</h3>
+            <p class="text-2xl font-bold">
+              {{
+                (budgetData.totalIncome ?? 0) - (budgetData.totalExpenses ?? 0)
+              }}
+            </p>
+          </Card>
+        </section>
+      </div>
+    </template>
 
     <div class="flex flex-row gap-4">
       <Card class="p-6 rounded-md my-8 w-full">
@@ -111,36 +152,6 @@ const progressData = computed(() =>
           </template>
         </TransactionChart>
       </Card>
-    </div>
-
-    <div class="flex flex-row w-full gap-4">
-      <section labeledby="monthly-income" class="flex-1">
-        <Card class="p-6 rounded-md">
-          <h3 id="monthly-income">Monthly income</h3>
-          <p class="text-2xl font-bold">
-            {{ monthBudgetInfo.data.value?.totalIncome }}
-          </p>
-        </Card>
-      </section>
-      <section labeledby="monthly-expenses" class="flex-1">
-        <Card class="p-6 rounded-md">
-          <h3 id="monthly-expenses">Monthly expenses</h3>
-          <p class="text-2xl font-bold">
-            {{ monthBudgetInfo.data.value?.totalExpenses }}
-          </p>
-        </Card>
-      </section>
-      <section labeledby="monthly-profit" class="flex-1">
-        <Card class="p-6 rounded-md">
-          <h3 id="monthly-profit">Monthly profit</h3>
-          <p class="text-2xl font-bold">
-            {{
-              (monthBudgetInfo.data.value?.totalIncome ?? 0) -
-              (monthBudgetInfo.data.value?.totalExpenses ?? 0)
-            }}
-          </p>
-        </Card>
-      </section>
     </div>
   </section>
 

@@ -1,24 +1,12 @@
 import { useQuery, useMutation } from "@tanstack/vue-query";
 import queryKeys from "~/lib/query-keys";
 import type { UserBudget, UserBudgetFormData } from "~~/server/budget/schema";
-import { useTransactions } from "./transactions/useTransactions";
+import { getLocalTimeZone } from "@internationalized/date";
 
 export function useBudget() {
   const dateStore = useDateStore();
 
   const { $orpc } = useNuxtApp();
-
-  const budget = useQuery({
-    queryKey: computed(() =>
-      [
-        ...queryKeys.budget,
-        dateStore.startDateStr,
-        dateStore.endDateStr,
-      ].filter(Boolean),
-    ),
-    queryFn: async () =>
-      await $orpc.budget.getUserBudgetByMonth.call(dateStore.startDate.month),
-  });
 
   const updateMutation = useMutation({
     mutationFn: async ({
@@ -62,38 +50,22 @@ export function useBudget() {
     },
   });
 
-  const { transactions } = useTransactions();
-  const { data: transactionsData } = transactions;
+  const localTimeZone = getLocalTimeZone();
 
-  const totalExpenses = computed(() => {
-    return transactionsData.value?.reduce((total, transaction) => {
-      if (transaction.type === "expense") {
-        return total + transaction.amount;
-      }
-      return total;
-    }, 0);
+  const monthAndYear = computed<[string, string]>(() => {
+    const month = dateStore.startDate.month.toString();
+    const year = dateStore.startDate.year.toString();
+
+    return [month, year];
   });
 
-  const totalIncome = computed(() => {
-    return transactionsData.value?.reduce((total, transaction) => {
-      if (transaction.type === "income") {
-        return total + transaction.amount;
-      }
-      return total;
-    }, 0);
-  });
-
-  const remainingBudget = computed(() => {
-    return (budget.data.value?.amount ?? 0) - (totalExpenses.value ?? 0);
-  });
-
-  const monthBudgetInfo = useQuery({
+  const budget = useQuery({
     queryKey: computed(() =>
-      [...queryKeys.budget, dateStore.startDateStr].filter(Boolean),
+      [...queryKeys.budget, ...monthAndYear.value].filter(Boolean),
     ),
     queryFn: async () => {
       return await $orpc.budget.calculateUserBudget.call({
-        start: dateStore.startDate.toDate(),
+        start: dateStore.startDate.toDate(localTimeZone),
       });
     },
     refetchInterval: 3000,
@@ -101,11 +73,7 @@ export function useBudget() {
 
   return {
     budget,
-    monthBudgetInfo,
     createMutation,
     updateMutation,
-    totalExpenses,
-    totalIncome,
-    remainingBudget,
   };
 }

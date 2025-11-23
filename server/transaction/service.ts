@@ -3,10 +3,8 @@ import { notificationService } from "../notification/service";
 import { transactionRepository } from "./repository";
 import type {
   CreateTransaction,
-  Transaction,
   UpdateTransaction,
   TransactionWithCategory,
-  CategoryTransactionCount,
 } from "./schema";
 
 export const transactionService = {
@@ -86,8 +84,8 @@ export const transactionService = {
   },
   async getTransactionsByUserId(
     id: string,
-    startDate?: Date,
-    endDate?: Date,
+    startDate: Date,
+    endDate: Date,
   ): Promise<TransactionWithCategory[]> {
     return await transactionRepository.getTransactionsByUserId(
       id,
@@ -97,26 +95,5 @@ export const transactionService = {
   },
   async deleteTransaction(id: number): Promise<void> {
     return await transactionRepository.deleteTransaction(id);
-  },
-  async getTransactionsByUserIdAndMonth(
-    id: string,
-    month: Date,
-  ): Promise<Transaction[]> {
-    return await transactionRepository.getTransactionsByUserIdAndMonth(
-      id,
-      month,
-    );
-  },
-
-  async groupTransactionsByCategory(
-    userId: string,
-    startDate?: Date,
-    endDate?: Date,
-  ): Promise<CategoryTransactionCount[]> {
-    return await transactionRepository.groupTransactionsByCategory(
-      userId,
-      startDate,
-      endDate,
-    );
   },
 };

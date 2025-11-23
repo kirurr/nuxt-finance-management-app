@@ -1,2 +1,6 @@
 # TODO
-    rework charts to new shadcn components
+    - mobile version
+    - loading
+    - aa compatability
+    - more iconsa and colors
+

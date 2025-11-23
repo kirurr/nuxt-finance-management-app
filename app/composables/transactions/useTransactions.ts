@@ -11,6 +11,7 @@ export function useTransactions() {
 
   const { $orpc } = useNuxtApp();
 
+  const localTimeZone = getLocalTimeZone();
   const transactions = useQuery({
     queryKey: computed(() =>
       [
@@ -19,11 +20,14 @@ export function useTransactions() {
         dateStore.endDateStr,
       ].filter(Boolean),
     ),
-    queryFn: async () =>
-      await $orpc.transaction.getTransactionsByUserId.call({
-        startDate: dateStore.startDate.toDate(),
-        endDate: dateStore.endDate?.toDate() ?? dateStore.startDate.toDate(),
-      }),
+    queryFn: async () => {
+
+      return await $orpc.transaction.getTransactionsByUserId.call({
+        startDate: dateStore.startDate.toDate(localTimeZone),
+        endDate:
+          dateStore.endDate?.toDate(localTimeZone) ??
+          dateStore.startDate.toDate(localTimeZone),
+      })}
   });
 
   const updateMutation = useMutation({
