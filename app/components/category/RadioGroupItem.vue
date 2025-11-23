@@ -18,8 +18,8 @@ const iconBg = color.lighten(0.1).toRgbString();
 
 <template>
   <RadioGroupItem
-    as-child
     :id="id"
+    as-child
     :value="value"
   >
     <button
@@ -32,7 +32,7 @@ const iconBg = color.lighten(0.1).toRgbString();
       }"
       :class="
         cn(
-          'group flex w-full items-center gap-3 rounded-lg p-2 transition-all',
+          'group flex w-full items-center gap-3 rounded-lg px-2 lg:p-2 transition-all',
           'cursor-pointer outline-2 outline-offset-2 outline-transparent',
           'focus-visible:outline-(--color)',
           'data-[state=checked]:outline-(--color)',
@@ -41,8 +41,7 @@ const iconBg = color.lighten(0.1).toRgbString();
         )
       "
     >
-      <!-- Icon -->
-      <div class="relative size-12 rounded-md shrink-0">
+      <div class="relative size-6 lg:size-12 rounded-md shrink-0">
         <span
           class="absolute inset-0 rounded-md z-10"
           :style="{
@@ -62,12 +61,10 @@ const iconBg = color.lighten(0.1).toRgbString();
         />
       </div>
 
-      <!-- Name -->
       <span class="text-lg font-semibold text-white">
         {{ props.category.name }}
       </span>
 
-      <!-- Controls -->
       <div class="flex items-center ml-auto">
         <CategoryDialogUpdate
           class-name="text-white hover:bg-(--icon-bg) hover:text-white"

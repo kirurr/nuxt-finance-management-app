@@ -8,6 +8,7 @@ const dateStore = useDateStore();
 <template>
 	<div>
 		<RangeDatePicker
+			class="max-w-full text-wrap"
 			v-model="dateStore.range"
 		/>
 	</div>

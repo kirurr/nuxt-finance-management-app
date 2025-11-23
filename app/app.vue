@@ -5,18 +5,18 @@ import { cn } from "~/lib/utils";
 
 const isLoading = computed(() => authClient.useSession().value.isPending);
 
-useHead({
-  htmlAttrs: {
-    style: isLoading.value && "overflow: hidden;",
-  },
-});
-
-watch(isLoading, (v) => {
-  document.documentElement.style.overflow = v ? "hidden" : "";
-});
+// useHead({
+//   htmlAttrs: {
+//     style: isLoading.value && "overflow: hidden;",
+//   },
+// });
+//
+// watch(isLoading, (v) => {
+//   document.documentElement.style.overflow = v ? "hidden" : "visible";
+// });
 </script>
 <template>
-  <div :class="cn('flex flex-col max-w-6xl mx-auto')">
+  <div :class="cn('w-screen lg:w-6xl mx-auto relative')">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
@@ -24,7 +24,7 @@ watch(isLoading, (v) => {
       v-if="isLoading"
       class="fixed inset-0 w-full h-screen bg-bg z-50 flex items-center justify-center"
     >
-      <LoaderCircle class="size-32 text-primary/60 animate-spin" />
+      <LoaderCircle class="size-16 lg:size-32 text-primary/60 animate-spin" />
     </div>
   </div>
 </template>

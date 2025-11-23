@@ -7,7 +7,7 @@ useCategories();
 
 <template>
     <HeaderComponent />
-    <main class="rounded-md mt-8 mb-4">
+    <main class="rounded-md mt-8 mb-4 lg:px-2">
       <slot />
     </main>
 </template>

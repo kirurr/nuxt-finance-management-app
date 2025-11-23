@@ -31,7 +31,7 @@ const props = withDefaults(defineProps<Props>(), {
   label: "Select date",
   required: false,
   minDate: () => new CalendarDate(1900, 1, 1),
-	maxDate: () => today(getLocalTimeZone()).add({ days: 1 }),
+  maxDate: () => today(getLocalTimeZone()).add({ days: 1 }),
   placeholder: "Pick a date",
 });
 

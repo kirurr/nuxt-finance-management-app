@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Funnel } from "lucide-vue-next";
+import { Funnel, LoaderCircle } from "lucide-vue-next";
 import { useTransactions } from "~/composables/transactions/useTransactions";
 import type { TransactionWithCategory } from "~~/server/transaction/schema";
 import { useForm } from "@tanstack/vue-form";
@@ -39,7 +39,6 @@ const form = useForm({
   onSubmit: ({ value }) => {
     let filteredTransactions = [...originalTransactions.value]; // ← START FROM ORIGINAL
 
-    // Price filters
     if (value.minPrice) {
       filteredTransactions = filteredTransactions.filter(
         (t) => t.amount >= Number(value.minPrice),
@@ -52,11 +51,7 @@ const form = useForm({
       );
     }
 
-    // Category filters
-    if (value.category === "") {
-      // NO OP — means "All categories"
-      // Just keep current filteredTransactions as-is
-    } else if (value.category === "no category") {
+    if (value.category === "no category") {
       filteredTransactions = filteredTransactions.filter((t) => !t.categoryId);
     } else {
       filteredTransactions = filteredTransactions.filter(
@@ -70,27 +65,26 @@ const form = useForm({
 </script>
 
 <template>
-  <section class="mt-12" labeledby="transactions">
+  <section class="lg:mt-12" labeledby="transactions">
     <Card class="p-4 rounded-md my-8">
-      <div class="flex flex-row justify-between items-center">
+      <div
+        class="flex flex-col gap-4 lg:gap-0 lg:flex-row justify-between lg:items-center"
+      >
         <div>
           <h2 id="transactions" class="text-3xl font-bold">Transactions</h2>
-          <p class="text-lg text-muted-foreground">Transactions list</p>
         </div>
-        <div class="flex flex-row gap-4">
+        <div class="flex flex-col-reverse lg:flex-row gap-2 lg:gap-4">
           <Button variant="outline" @click="toggleFilters"
             ><Funnel /> Filters
           </Button>
           <TransactionDialogCreate />
         </div>
       </div>
+
       <Collapsible v-model:open="isFiltersOpen">
         <CollapsibleContent>
-          <form
-            class="p-2 rounded-md"
-            @submit.prevent.stop="form.handleSubmit"
-          >
-            <FieldGroup class="grid grid-cols-3 gap-4 items-center">
+          <form class="lg:p-2" @submit.prevent.stop="form.handleSubmit">
+            <FieldGroup class="grid lg:grid-cols-3 gap-4 items-center">
               <form.Field name="category">
                 <template #default="{ field }">
                   <Field>
@@ -154,10 +148,14 @@ const form = useForm({
           </form>
         </CollapsibleContent>
       </Collapsible>
-      <span v-if="isPending">Loading...</span>
+
+			<template v-if="isPending">
+				<LoaderCircle class="size-16 mx-auto lg:size-32 text-primary/60 animate-spin" />
+			</template>
       <span v-else-if="error"
         >Error: {{ error.message ?? "Unknown error" }}</span
       >
+
       <TransactionList v-if="data" :data="transactionsData ?? []" />
     </Card>
   </section>

@@ -51,6 +51,8 @@
   --success: oklch(73.8% 0.2411 140.7);
   --success-foreground: oklch(62.7% 0.1699 149.2);
 
+	--vis-donut-background-color: var(--bg) !important;
+
    --bg:  oklch(90.6% 0.0189 151.5);
 	 --radius: 0.65rem;
    --background:  oklch(1 0 0);

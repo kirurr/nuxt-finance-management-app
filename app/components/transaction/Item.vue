@@ -10,10 +10,10 @@ const isHaveCategory = computed(() => data.category);
 </script>
 
 <template>
-  <Card class="flex flex-row p-2 bg items-center">
-    <div class="relative flex items-center rounded-md size-12">
+  <Card class="flex flex-row px-4 py-2 lg:p-2 items-center">
+    <div class="hidden lg:flex relative items-center rounded-md size-12">
       <span
-				v-if="isHaveCategory"
+        v-if="isHaveCategory"
         class="size-full rounded-md relative z-10"
         :style="{
           backgroundColor: colord(data.category?.color?.color ?? '')
@@ -29,7 +29,7 @@ const isHaveCategory = computed(() => data.category);
         }"
       />
       <span
-				v-if="isHaveCategory"
+        v-if="isHaveCategory"
         class="size-full rounded-md absolute"
         :style="{
           backgroundColor: colord(data.category?.color?.color ?? '')
@@ -41,36 +41,46 @@ const isHaveCategory = computed(() => data.category);
     <div>
       <div class="flex items-center gap-2">
         <h3 class="text-xl font-semibold">{{ data.name }}</h3>
-        <Badge
-          v-if="data.type === 'expense'"
-          class="bg-destructive/10 text-destructive"
-          >Expense</Badge
-        >
-        <Badge v-if="data.type === 'income'" class="bg-success/10 text-success-foreground"
-          >Income</Badge
-        >
-      </div>
-        <p v-if="data.description" class="text-muted-foreground">
-          {{ data.description }}
-        </p>
-      <div class="mt-2 flex gap-4 text-muted-foreground" >
-				<div v-if="data.category" class="flex items-center gap-2">
-					<div
-						class="rounded-full size-2"
-						:style="{
-							backgroundColor: colord(data.category.color?.color ?? '').toRgbString(),
-						}"
-					/>
-					<span>{{ data.category.name }}</span>
+				<div class="hidden lg:block">
+					<Badge
+						v-if="data.type === 'expense'"
+						class="bg-destructive/10 text-destructive"
+						>Expense</Badge
+					>
+					<Badge
+						v-if="data.type === 'income'"
+						class="bg-success/10 text-success-foreground"
+						>Income</Badge
+					>
 				</div>
-				<span>{{ data.date.toLocaleDateString() }}</span>
+      </div>
+      <p v-if="data.description" class="text-muted-foreground">
+        {{ data.description }}
+      </p>
+      <div class="mt-2 flex gap-4 text-muted-foreground">
+        <div v-if="data.category" class="flex items-center gap-2">
+          <div
+            class="rounded-full size-2"
+            :style="{
+              backgroundColor: colord(
+                data.category.color?.color ?? '',
+              ).toRgbString(),
+            }"
+          />
+          <span>{{ data.category.name }}</span>
+        </div>
+        <span>{{ data.date.toLocaleDateString() }}</span>
       </div>
     </div>
-		<div class="text-xl font-bold ml-auto flex items-center">
-			<span v-if="data.type === 'expense'" class="text-destructive">-{{ data.amount }}</span>
-			<span v-if="data.type === 'income'" class="text-success">+{{ data.amount }}</span>
-		</div>
-    <div class="flex flex-row items-center gap-2">
+    <div class="text-xl font-bold ml-auto flex items-center">
+      <span v-if="data.type === 'expense'" class="text-destructive"
+        >-{{ data.amount }}</span
+      >
+      <span v-if="data.type === 'income'" class="text-success"
+        >+{{ data.amount }}</span
+      >
+    </div>
+    <div class="flex flex-col lg:flex-row items-center gap-2">
       <TransactionDialogUpdate :transaction-data="data" />
       <TransactionDialogDelete :transaction-data="data" />
     </div>

@@ -34,8 +34,8 @@ const progressData = computed(() =>
 );
 </script>
 <template>
-  <section class="space-y-4" labeledby="budget-summary">
-    <div class="flex flex-row items-center justify-between">
+  <section class="space-y-8 lg:space-y-4 px-2 lg:px-0" labeledby="budget-summary">
+    <div class="flex flex-col lg:flex-row items-center justify-between">
       <div>
         <h1 id="budget-summary" class="text-4xl font-bold mb-2">
           Budget & summary
@@ -103,9 +103,9 @@ const progressData = computed(() =>
     </section>
 
     <template v-if="budgetData">
-      <div class="flex flex-row w-full gap-4 mt-10">
+      <div class="flex flex-col lg:flex-row w-full gap-4">
         <section labeledby="monthly-income" class="flex-1">
-          <Card class="p-6 rounded-md">
+          <Card class="p-4 lg:p-6 rounded-md flex flex-row gap-4 justify-between lg:justify-start lg:flex-col lg:h-full">
             <h3 id="monthly-income">Monthly income</h3>
             <p class="text-2xl font-bold">
               {{ budgetData.totalIncome }}
@@ -113,7 +113,7 @@ const progressData = computed(() =>
           </Card>
         </section>
         <section labeledby="monthly-expenses" class="flex-1">
-          <Card class="p-6 rounded-md">
+          <Card class="p-4 lg:p-6 rounded-md flex flex-row gap-4 justify-between lg:justify-start lg:flex-col lg:h-full">
             <h3 id="monthly-expenses">Monthly expenses</h3>
             <p class="text-2xl font-bold">
               {{ budgetData.totalExpenses }}
@@ -121,7 +121,7 @@ const progressData = computed(() =>
           </Card>
         </section>
         <section labeledby="monthly-profit" class="flex-1">
-          <Card class="p-6 rounded-md">
+          <Card class="p-4 lg:p-6 rounded-md flex flex-row gap-4 justify-between lg:justify-start lg:flex-col lg:h-full">
             <h3 id="monthly-profit">Monthly profit</h3>
             <p class="text-2xl font-bold">
               {{
@@ -133,8 +133,8 @@ const progressData = computed(() =>
       </div>
     </template>
 
-    <div class="flex flex-row gap-4">
-      <Card class="p-6 rounded-md my-8 w-full">
+    <div class="flex flex-col lg:flex-row gap-4">
+      <Card class="lg:p-6 p-4 rounded-md w-full grow">
         <TransactionChart title="Expenses" type="expense">
           <template #icon>
             <div class="rounded-md bg-red-200/50 p-2 text-red-600">
@@ -143,7 +143,7 @@ const progressData = computed(() =>
           </template>
         </TransactionChart>
       </Card>
-      <Card class="p-6 rounded-md my-8 w-full">
+      <Card class="p-6 rounded-md w-full grow">
         <TransactionChart title="Income" type="income">
           <template #icon>
             <div class="rounded-md bg-green-200/50 p-2 text-green-600">
@@ -153,7 +153,8 @@ const progressData = computed(() =>
         </TransactionChart>
       </Card>
     </div>
-  </section>
 
-  <TransactionSection />
+		<TransactionSection />
+
+  </section>
 </template>

@@ -42,7 +42,7 @@ const props = withDefaults(
        */
       customTooltip?: Component;
 
-			arcWidth?: number;
+      arcWidth?: number;
     }
   >(),
   {
@@ -52,7 +52,7 @@ const props = withDefaults(
     filterOpacity: 0.2,
     showTooltip: true,
     showLegend: true,
-		arcWidth: 40,
+    arcWidth: 40,
   },
 );
 
@@ -85,6 +85,7 @@ const totalValue = computed(() =>
     return prev + curr[props.category];
   }, 0),
 );
+
 </script>
 
 <template>
@@ -107,7 +108,9 @@ const totalValue = computed(() =>
         :sort-function="sortFunction"
         :color="colors"
         :arc-width="type === 'donut' ? arcWidth : 0"
-        :show-background="false"
+				:pad-angle="0.05"
+				:corner-radius="5"
+        :show-background="data.length > 1 ? false : true"
         :central-label="type === 'donut' ? valueFormatter(totalValue) : ''"
         :events="{
           [Donut.selectors.segment]: {

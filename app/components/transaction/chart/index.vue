@@ -27,7 +27,7 @@ const value = computed(() => chart.value.chartData.reduce((acc, cur) => acc + cu
       :data="chart.chartData"
       :category="'total'"
       :colors="[...chart.colors]"
-			class="size-92 mx-auto"
+			class="h-92 mx-auto w-full lg:w-92"
 			:arc-width="60"
     />
 		<TransactionChartCategoryList :categories="chart.chartData" />

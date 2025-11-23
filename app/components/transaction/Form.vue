@@ -167,7 +167,7 @@ const { categories } = useCategories();
               <RadioGroup
                 :model-value="field.state.value ?? ''"
                 :aria-labelledby="`label-${field.name}`"
-                class="space-y-2"
+                class="lg:space-y-2"
                 @update:model-value="(val) => field.handleChange(val)"
               >
                 <div

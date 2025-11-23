@@ -54,9 +54,9 @@ function setOpen(value: boolean) {
         </template>
       </Button>
     </PopoverTrigger>
-    <PopoverContent class="w-100 max-h-[600px]">
+    <PopoverContent class="lg:w-100 w-full max-h-[600px]">
       <h4 class="font-medium leading-none mb-4">Notifications</h4>
-			<ScrollArea class="max-h-[600px] overflow-y-auto">
+			<ScrollArea class="max-h-[400px] overflow-y-auto">
 				<ul
 					class="space-y-4"
 				>
