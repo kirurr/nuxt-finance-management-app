@@ -5,7 +5,7 @@ definePageMeta({
 </script>
 
 <template>
-  <Tabs default-value="signin" class="w-[400px]">
+  <Tabs default-value="signin" class="w-full lg:w-[400px]">
     <TabsList class="grid w-full grid-cols-2">
       <TabsTrigger value="signin">Sign In</TabsTrigger>
       <TabsTrigger value="signup">Sign Up</TabsTrigger>

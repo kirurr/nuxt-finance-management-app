@@ -4,13 +4,15 @@ import { Menu } from "lucide-vue-next";
 </script>
 
 <template>
-  <header class="pt-4 lg:pt-0 lg:px-2 px-4 w-full lg:block flex flex-row-reverse lg:relative sticky top-0 z-50">
+  <header
+    class="pt-4 lg:pt-0 lg:px-2 px-4 w-full lg:block flex flex-row-reverse lg:relative sticky top-0 z-50"
+  >
     <Sheet class="lg:hidden">
       <SheetTrigger as-child>
-					<Button class="lg:hidden ml-auto" variant="outline" size="icon">
-						<Menu class="size-6" />
-					</Button>
-					<NotificationsPopover />
+        <Button class="lg:hidden ml-auto mr-4" variant="outline" size="icon">
+          <Menu class="size-6" />
+        </Button>
+        <NotificationsPopover class="lg:hidden" />
       </SheetTrigger>
       <SheetContent class="w-[85vw]">
         <SheetHeader>

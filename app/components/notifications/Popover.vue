@@ -3,6 +3,11 @@ import { useMutation, useQuery } from "@tanstack/vue-query";
 import queryKeys from "~/lib/query-keys";
 import type { NotificationWithIcon } from "~~/server/notification/schema";
 import { Bell } from "lucide-vue-next";
+import { cn } from "@/lib/utils";
+
+const props = defineProps<{
+  class?: string;
+}>();
 
 const { $orpc } = useNuxtApp();
 
@@ -46,7 +51,7 @@ function setOpen(value: boolean) {
 <template>
   <Popover :open="isOpen" @update:open="(v: boolean) => setOpen(v)">
     <PopoverTrigger as-child>
-      <Button variant="outline" size="icon" class="relative">
+      <Button variant="outline" size="icon" class="relative" :class="cn(props.class)">
         <Bell v-if="notSeenNotifications.length === 0" />
         <template v-else>
           <span class="absolute bg-red-500 rounded-full p-1 right-1 top-1" />

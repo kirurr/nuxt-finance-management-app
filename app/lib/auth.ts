@@ -4,7 +4,7 @@ export async function handleSignOut() {
   await authClient.signOut({
     fetchOptions: {
       onSuccess: async () => {
-        await navigateTo("signin", { external: true });
+        await navigateTo("auth", { external: true });
       },
     },
   });
