@@ -6,10 +6,11 @@ const dateStore = useDateStore();
 </script>
 
 <template>
-	<div>
+	<div role="group" aria-label="Date range selection">
 		<RangeDatePicker
-			class="max-w-full text-wrap"
 			v-model="dateStore.range"
+			class="max-w-full text-wrap"
+			aria-label="Select date range"
 		/>
 	</div>
 </template>

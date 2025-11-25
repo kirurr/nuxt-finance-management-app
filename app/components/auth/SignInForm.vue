@@ -35,7 +35,7 @@ const form = useForm({
 </script>
 
 <template>
-  <form @submit.prevent.stop="form.handleSubmit">
+  <form aria-label="Sign in form" @submit.prevent.stop="form.handleSubmit">
     <FieldGroup>
       <form.Field
         name="email"
@@ -52,10 +52,11 @@ const form = useForm({
               :name="field.name"
               placeholder="example@email.com"
               type="email"
+              aria-describedby="email-error"
               @blur="field.handleBlur"
               @input="(e: any) => field.handleChange(e.target.value)"
             />
-            <FieldError>{{
+            <FieldError id="email-error">{{
               field.state.meta.errors.map((e) => e?.message).join(", ")
             }}</FieldError>
           </Field>
@@ -76,10 +77,11 @@ const form = useForm({
               type="password"
               :name="field.name"
               placeholder="********"
+              aria-describedby="password-error"
               @blur="field.handleBlur"
               @input="(e: any) => field.handleChange(e.target.value)"
             />
-            <FieldError
+            <FieldError id="password-error"
               >{{ field.state.meta.errors.map((e) => e?.message).join(", ") }}
             </FieldError>
           </Field>
@@ -88,12 +90,12 @@ const form = useForm({
       <Field>
         <form.Subscribe>
           <template #default="{ canSubmit, isSubmitting }">
-            <Button type="submit" :disabled="!canSubmit">
-              {{ isSubmitting ? "..." : "Sign in" }}
+            <Button type="submit" :disabled="!canSubmit" aria-describedby="submit-error">
+              {{ isSubmitting ? "Signing in..." : "Sign in" }}
             </Button>
           </template>
         </form.Subscribe>
-        <FieldError>{{ errorRef }}</FieldError>
+        <FieldError id="submit-error">{{ errorRef }}</FieldError>
       </Field>
     </FieldGroup>
   </form>

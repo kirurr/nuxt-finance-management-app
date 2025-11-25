@@ -32,12 +32,12 @@ const remainingBudget = computed(() => {
 </script>
 
 <template>
-  <div v-if="isPending">Loading...</div>
-  <div v-else class="flex flex-row gap-2">
-      <div>total: {{ data?.amount }}</div>
-      <div>spend: {{ totalExpenses }}</div>
-      <div>income: {{ totalIncome }}</div>
-      <div>remaining: {{ remainingBudget }}</div>
+  <div v-if="isPending" role="status" aria-label="Loading budget data">Loading...</div>
+  <div v-else class="flex flex-row gap-2" role="group" aria-label="Budget summary information">
+      <div aria-label="Total budget amount">total: {{ data?.amount }}</div>
+      <div aria-label="Total expenses">spend: {{ totalExpenses }}</div>
+      <div aria-label="Total income">income: {{ totalIncome }}</div>
+      <div aria-label="Remaining budget">remaining: {{ remainingBudget }}</div>
     <template v-if="data">
       <BudgetDialogUpdate :data="data" />
     </template>

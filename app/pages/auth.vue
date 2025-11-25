@@ -5,15 +5,15 @@ definePageMeta({
 </script>
 
 <template>
-  <Tabs default-value="signin" class="w-full lg:w-[400px]">
-    <TabsList class="grid w-full grid-cols-2">
-      <TabsTrigger value="signin">Sign In</TabsTrigger>
-      <TabsTrigger value="signup">Sign Up</TabsTrigger>
+  <Tabs default-value="signin" class="w-full lg:w-[400px]" aria-label="Authentication">
+    <TabsList class="grid w-full grid-cols-2" role="tablist" aria-label="Authentication options">
+      <TabsTrigger id="signin0-trigger" value="signin" role="tab" aria-selected="true" aria-controls="signin0-panel">Sign In</TabsTrigger>
+      <TabsTrigger id="signup0-trigger" value="signup" role="tab" aria-controls="signup0-panel">Sign Up</TabsTrigger>
     </TabsList>
-    <TabsContent tabindex="-1" value="signin">
+    <TabsContent id="signin0-panel" tabindex="-1" value="signin" role="tabpanel" aria-labelledby="signin0-trigger">
       <AuthSignIn />
     </TabsContent>
-    <TabsContent tabindex="-1" value="signup">
+    <TabsContent id="signup0-panel" tabindex="-1" value="signup" role="tabpanel" aria-labelledby="signup0-trigger">
       <AuthSignUp />
     </TabsContent>
   </Tabs>

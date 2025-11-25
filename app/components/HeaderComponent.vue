@@ -9,16 +9,21 @@ import { Menu } from "lucide-vue-next";
   >
     <Sheet class="lg:hidden">
       <SheetTrigger as-child>
-        <Button class="lg:hidden ml-auto mr-4" variant="outline" size="icon">
-          <Menu class="size-6" />
+        <Button
+          class="lg:hidden ml-auto mr-4"
+          variant="outline"
+          size="icon"
+          aria-label="Open menu"
+        >
+          <Menu class="size-6" aria-hidden="true" />
         </Button>
         <NotificationsPopover class="lg:hidden" />
       </SheetTrigger>
-      <SheetContent class="w-[85vw]">
+      <SheetContent class="w-[85vw]" role="dialog" aria-label="Navigation menu">
         <SheetHeader>
           <SheetTitle>Menu</SheetTitle>
         </SheetHeader>
-        <nav>
+        <nav role="navigation" aria-label="Mobile menu">
           <ul class="px-4 flex flex-col gap-4 items-start">
             <li class="flex gap-2 items-center">
               <AuthSignOut />
@@ -34,10 +39,17 @@ import { Menu } from "lucide-vue-next";
       </SheetContent>
     </Sheet>
     <Card class="hidden lg:block p-4">
-      <nav>
+      <nav role="navigation" aria-label="Main navigation">
         <ul class="flex flex-row gap-4">
           <li>
-            <NuxtLink tabindex="0" to="/" class="nav-link"> Budget </NuxtLink>
+            <NuxtLink
+              tabindex="0"
+              to="/"
+              class="nav-link"
+              aria-label="Budget page"
+            >
+              Budget
+            </NuxtLink>
           </li>
           <li class="ml-auto flex flex-row gap-4">
             <TransactionDialogCreate />

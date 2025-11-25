@@ -34,7 +34,7 @@ const progressData = computed(() =>
 );
 </script>
 <template>
-  <section class="space-y-8 lg:space-y-4 px-2 lg:px-0" labeledby="budget-summary">
+  <section class="space-y-8 lg:space-y-4 px-2 lg:px-0" aria-labelledby="budget-summary">
     <div class="flex flex-col lg:flex-row items-center justify-between">
       <div>
         <h1 id="budget-summary" class="text-4xl font-bold mb-2">
@@ -44,7 +44,7 @@ const progressData = computed(() =>
       <DateSelect />
     </div>
 
-    <section labeledby="monthly-budget">
+    <section aria-labelledby="monthly-budget">
       <Card class="p-6 rounded-md">
         <template v-if="budgetData">
           <div class="flex flex-row justify-between">
@@ -55,7 +55,7 @@ const progressData = computed(() =>
               >
                 Monthly budget
               </h3>
-              <span class="text-4xl font-bold">{{
+              <span class="text-4xl font-bold" aria-label="Monthly budget amount">{{
                 budgetData?.amount ?? 0
               }}</span>
             </div>
@@ -69,18 +69,22 @@ const progressData = computed(() =>
             <div class="w-full">
               <div class="flex flex-row items-center justify-between mb-2">
                 <span class="text-muted-foreground">Spent</span>
-                <span class="font-bold">{{ budgetData?.totalExpenses }}</span>
+                <span class="font-bold" aria-label="Amount spent">{{ budgetData?.totalExpenses }}</span>
               </div>
               <Progress
                 id="spent-progress"
                 class="*:bg-red-500"
                 :model-value="progressData.spentPercent"
+                :aria-valuenow="progressData.spentPercent"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-label="Spent budget percentage"
               />
             </div>
             <div class="w-full">
               <div class="flex flex-row items-center justify-between mb-2">
                 <span class="text-muted-foreground">Remaining</span>
-                <span class="font-bold">{{
+                <span class="font-bold" aria-label="Amount remaining">{{
                   budgetData?.remainingBudget > 0
                     ? budgetData?.remainingBudget
                     : 0
@@ -90,6 +94,10 @@ const progressData = computed(() =>
                 id="remaining-progress"
                 class="*:bg-green-500"
                 :model-value="progressData.remainingPercent"
+                :aria-valuenow="progressData.remainingPercent"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-label="Remaining budget percentage"
               />
             </div>
           </div>
@@ -104,26 +112,26 @@ const progressData = computed(() =>
 
     <template v-if="budgetData">
       <div class="flex flex-col lg:flex-row w-full gap-4">
-        <section labeledby="monthly-income" class="flex-1">
+        <section aria-labelledby="monthly-income" class="flex-1">
           <Card class="p-4 lg:p-6 rounded-md flex flex-row gap-4 justify-between lg:justify-start lg:flex-col lg:h-full">
             <h3 id="monthly-income">Monthly income</h3>
-            <p class="text-2xl font-bold">
+            <p class="text-2xl font-bold" aria-label="Monthly income amount">
               {{ budgetData.totalIncome }}
             </p>
           </Card>
         </section>
-        <section labeledby="monthly-expenses" class="flex-1">
+        <section aria-labelledby="monthly-expenses" class="flex-1">
           <Card class="p-4 lg:p-6 rounded-md flex flex-row gap-4 justify-between lg:justify-start lg:flex-col lg:h-full">
             <h3 id="monthly-expenses">Monthly expenses</h3>
-            <p class="text-2xl font-bold">
+            <p class="text-2xl font-bold" aria-label="Monthly expenses amount">
               {{ budgetData.totalExpenses }}
             </p>
           </Card>
         </section>
-        <section labeledby="monthly-profit" class="flex-1">
+        <section aria-labelledby="monthly-profit" class="flex-1">
           <Card class="p-4 lg:p-6 rounded-md flex flex-row gap-4 justify-between lg:justify-start lg:flex-col lg:h-full">
             <h3 id="monthly-profit">Monthly profit</h3>
-            <p class="text-2xl font-bold">
+            <p class="text-2xl font-bold" aria-label="Monthly profit amount">
               {{
                 (budgetData.totalIncome ?? 0) - (budgetData.totalExpenses ?? 0)
               }}
@@ -137,7 +145,7 @@ const progressData = computed(() =>
       <Card class="lg:p-6 p-4 rounded-md w-full grow">
         <TransactionChart title="Expenses" type="expense">
           <template #icon>
-            <div class="rounded-md bg-red-200/50 p-2 text-red-600">
+            <div class="rounded-md bg-red-200/50 p-2 text-red-600" aria-hidden="true">
               <TrendingDown />
             </div>
           </template>
@@ -146,7 +154,7 @@ const progressData = computed(() =>
       <Card class="p-6 rounded-md w-full grow">
         <TransactionChart title="Income" type="income">
           <template #icon>
-            <div class="rounded-md bg-green-200/50 p-2 text-green-600">
+            <div class="rounded-md bg-green-200/50 p-2 text-green-600" aria-hidden="true">
               <TrendingUp />
             </div>
           </template>

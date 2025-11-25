@@ -41,7 +41,7 @@ const form = useForm({
 </script>
 
 <template>
-    <form @submit.prevent.stop="form.handleSubmit">
+    <form aria-label="Sign up form" @submit.prevent.stop="form.handleSubmit">
 		<FieldGroup>
       <form.Field
         name="name"
@@ -57,10 +57,11 @@ const form = useForm({
               v-model="field.state.value"
               :name="field.name"
 							placeholder="John Doe"
+              aria-describedby="name-error"
               @blur="field.handleBlur"
               @input="(e: any) => field.handleChange(e.target.value)"
             />
-            <FieldError>{{
+            <FieldError id="name-error">{{
               field.state.meta.errors.map((e) => e?.message).join(", ")
             }}</FieldError>
           </Field>
@@ -81,10 +82,11 @@ const form = useForm({
               :name="field.name"
               type="email"
 							placeholder="example@email.com"
+              aria-describedby="email-error"
               @blur="field.handleBlur"
               @input="(e: any) => field.handleChange(e.target.value)"
             />
-            <FieldError>{{
+            <FieldError id="email-error">{{
               field.state.meta.errors.map((e) => e?.message).join(", ")
             }}</FieldError>
           </Field>
@@ -105,10 +107,11 @@ const form = useForm({
               :name="field.name"
               type="password"
 							placeholder="********"
+              aria-describedby="password-error"
               @blur="field.handleBlur"
               @input="(e: any) => field.handleChange(e.target.value)"
             />
-            <FieldError>{{
+            <FieldError id="password-error">{{
               field.state.meta.errors.map((e) => e?.message).join(", ")
             }}</FieldError>
           </Field>
@@ -117,12 +120,12 @@ const form = useForm({
         <Field>
           <form.Subscribe>
             <template #default="{ canSubmit, isSubmitting }">
-              <Button type="submit" :disabled="!canSubmit">
-                {{ isSubmitting ? "..." : "Sign in" }}
+              <Button type="submit" :disabled="!canSubmit" aria-describedby="submit-error">
+                {{ isSubmitting ? "Creating account..." : "Sign up" }}
               </Button>
             </template>
           </form.Subscribe>
-          <FieldError>{{ errorRef }}</FieldError>
+          <FieldError id="submit-error">{{ errorRef }}</FieldError>
         </Field>
 			</FieldGroup>
     </form>

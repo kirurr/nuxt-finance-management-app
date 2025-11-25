@@ -65,7 +65,7 @@ const form = useForm({
 </script>
 
 <template>
-  <section class="lg:mt-12" labeledby="transactions">
+  <section class="lg:mt-12" aria-labelledby="transactions">
     <Card class="p-4 rounded-md my-8">
       <div
         class="flex flex-col gap-4 lg:gap-0 lg:flex-row justify-between lg:items-center"
@@ -74,8 +74,8 @@ const form = useForm({
           <h2 id="transactions" class="text-3xl font-bold">Transactions</h2>
         </div>
         <div class="flex flex-col-reverse lg:flex-row gap-2 lg:gap-4">
-          <Button variant="outline" @click="toggleFilters"
-            ><Funnel /> Filters
+          <Button variant="outline" aria-label="Toggle filters" @click="toggleFilters">
+            <Funnel aria-hidden="true" /> Filters
           </Button>
           <TransactionDialogCreate />
         </div>
@@ -83,7 +83,11 @@ const form = useForm({
 
       <Collapsible v-model:open="isFiltersOpen">
         <CollapsibleContent>
-          <form class="lg:p-2" @submit.prevent.stop="form.handleSubmit">
+          <form
+            class="lg:p-2"
+            aria-label="Transaction filters form"
+            @submit.prevent.stop="form.handleSubmit"
+          >
             <FieldGroup class="grid lg:grid-cols-3 gap-4 items-center">
               <form.Field name="category">
                 <template #default="{ field }">
@@ -142,7 +146,7 @@ const form = useForm({
                 </form.Field>
               </FieldSet>
               <Field>
-                <Button type="submit"> Apply filters </Button>
+                <Button type="submit" aria-label="Apply filters"> Apply filters </Button>
               </Field>
             </FieldGroup>
           </form>
@@ -150,7 +154,11 @@ const form = useForm({
       </Collapsible>
 
 			<template v-if="isPending">
-				<LoaderCircle class="size-16 mx-auto lg:size-32 text-primary/60 animate-spin" />
+				<LoaderCircle
+          class="size-16 mx-auto lg:size-32 text-primary/60 animate-spin"
+          aria-label="Loading transactions"
+          role="status"
+        />
 			</template>
       <span v-else-if="error"
         >Error: {{ error.message ?? "Unknown error" }}</span
