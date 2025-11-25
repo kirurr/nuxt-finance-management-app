@@ -65,13 +65,13 @@ const form = useForm({
 </script>
 
 <template>
-  <section class="lg:mt-12" aria-labelledby="transactions">
+  <section id="transactions" class="lg:mt-12" aria-labelledby="transactions-title">
     <Card class="p-4 rounded-md my-8">
       <div
         class="flex flex-col gap-4 lg:gap-0 lg:flex-row justify-between lg:items-center"
       >
         <div>
-          <h2 id="transactions" class="text-3xl font-bold">Transactions</h2>
+          <h2 id="transactions-title" class="text-3xl font-bold">Transactions</h2>
         </div>
         <div class="flex flex-col-reverse lg:flex-row gap-2 lg:gap-4">
           <Button variant="outline" aria-label="Toggle filters" @click="toggleFilters">

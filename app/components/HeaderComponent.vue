@@ -34,6 +34,26 @@ import { Menu } from "lucide-vue-next";
             <li>
               <DateSelect />
             </li>
+            <li>
+              <NuxtLink
+                tabindex="0"
+                to="/"
+                class="nav-link"
+                aria-label="Budget page"
+              >
+                Budget
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink
+                tabindex="0"
+                to="/#transactions"
+                class="nav-link"
+                aria-label="Transactions section"
+              >
+                Transactions
+              </NuxtLink>
+            </li>
           </ul>
         </nav>
       </SheetContent>
@@ -49,6 +69,16 @@ import { Menu } from "lucide-vue-next";
               aria-label="Budget page"
             >
               Budget
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink
+              tabindex="0"
+              to="/#transactions"
+              class="nav-link"
+              aria-label="Transactions section"
+            >
+              Transactions
             </NuxtLink>
           </li>
           <li class="ml-auto flex flex-row gap-4">
