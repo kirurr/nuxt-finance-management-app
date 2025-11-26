@@ -36,6 +36,8 @@ export const budgetRouter = {
       z.object({
         start: z.date(),
         end: z.date().optional(),
+				month: z.number(),
+				year: z.number(),
       }),
     )
     .handler(async ({ input, context }) => {
@@ -49,6 +51,8 @@ export const budgetRouter = {
         context.user.id,
         input.start,
         end,
+				input.month,
+				input.year,
       );
     }),
 };

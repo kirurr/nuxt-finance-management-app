@@ -3,6 +3,7 @@ import { useTransactions } from "~/composables/transactions/useTransactions";
 
 useTransactions();
 useCategories();
+useBudget();
 </script>
 
 <template>

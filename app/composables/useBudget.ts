@@ -66,6 +66,8 @@ export function useBudget() {
     queryFn: async () => {
       return await $orpc.budget.calculateUserBudget.call({
         start: dateStore.startDate.toDate(localTimeZone),
+				month: Number(monthAndYear.value[0]),
+				year: Number(monthAndYear.value[1]),
       });
     },
     refetchInterval: 3000,

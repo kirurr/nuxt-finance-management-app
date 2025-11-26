@@ -34,7 +34,7 @@ export const userBudgetRepository = {
     )[0];
   },
 
-  async calculateUserBudget(userId: string, start: Date, end: Date) {
+  async calculateUserBudget(userId: string, start: Date, end: Date, month: number, year: number) {
     const result = await db
       .select({
         id: userBudget.id,
@@ -60,8 +60,8 @@ export const userBudgetRepository = {
       .where(
         and(
           eq(userBudget.userId, userId),
-          eq(userBudget.month, start.getMonth() + 1),
-          eq(userBudget.year, start.getFullYear()),
+          eq(userBudget.month, month),
+          eq(userBudget.year, year),
         ),
       )
       .groupBy(userBudget.id);
@@ -70,13 +70,6 @@ export const userBudgetRepository = {
       return null;
     }
 
-		console.log(start.toISOString(), start.getMonth() + 1)
-		console.log({
-			startUnix: Math.floor(start.getTime() / 1000),
-			endUnix: Math.floor(end.getTime() / 1000),
-			month: start.getMonth() + 1,
-			year: start.getFullYear(),
-		});
     return result[0];
   },
 };
