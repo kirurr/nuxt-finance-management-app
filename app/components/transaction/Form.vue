@@ -43,7 +43,7 @@ const { categories } = useCategories();
         <form.Field
           name="name"
           :validators="{
-            onChange: z.string().min(1, 'Name must be at least 1 character'),
+            onChange: z.string().min(1, 'Name must be at least 1 character').max(256, 'Name must be at most 256 characters'),
           }"
         >
           <template #default="{ field }">
@@ -72,9 +72,12 @@ const { categories } = useCategories();
           :validators="{
             onChange: z
               .string()
-              .refine((val) => !isNaN(Number(val)) && Number(val) >= 1, {
-                message: 'Amount must be a numeric string of at least 1',
-              }),
+						.refine((val) => {
+							const num = Number(val);
+							if (num) return { message: 'Amount must be a number' };
+							if (num <= 0) return { message: 'Amount must be greater than 0' };
+							if (num >= Number.MAX_VALUE) return { message: 'Amount must be less than 999999999999' };
+						}),
           }"
         >
           <template #default="{ field }">
@@ -127,7 +130,7 @@ const { categories } = useCategories();
           :validators="{
             onChange: z
               .string()
-              .max(250, 'Description must be at most 250 characters')
+              .max(256, 'Description must be at most 256 characters')
               .optional(),
           }"
         >
@@ -201,7 +204,12 @@ const { categories } = useCategories();
             </Field>
           </template>
         </form.Field>
-        <form.Field name="type">
+        <form.Field
+					name="type"
+					:validators="{
+						onChange: z.enum(['expense', 'income']),
+					}"
+				>
           <template #default="{ field }">
             <Field>
               <RadioGroup
@@ -233,7 +241,7 @@ const { categories } = useCategories();
           <form.Subscribe>
             <template #default="{ canSubmit, isSubmitting }">
               <Button type="submit" :disabled="!canSubmit">
-                {{ isSubmitting ? "..." : "Submit" }}
+                {{ isSubmitting ? "Submitting..." : "Submit" }}
               </Button>
             </template>
           </form.Subscribe>

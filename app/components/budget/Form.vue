@@ -32,11 +32,13 @@ const form = useForm({
       <form.Field
         name="amount"
         :validators="{
-          onChange: z
-            .string()
-            .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
-              message: 'Amount must be a numeric value of at least 0',
-            }),
+          onChange: z.string().refine((val) => {
+            const num = Number(val);
+            if (num) return { message: 'Amount must be a number' };
+            if (num <= 0) return { message: 'Amount must be greater than 0' };
+            if (num >= Number.MAX_VALUE)
+              return { message: 'Amount must be less than 999999999999' };
+          }),
         }"
       >
         <template #default="{ field }">
@@ -64,7 +66,7 @@ const form = useForm({
         <form.Subscribe>
           <template #default="{ canSubmit, isSubmitting }">
             <Button type="submit" :disabled="!canSubmit">
-              {{ isSubmitting ? "..." : "Submit" }}
+              {{ isSubmitting ? "Submitting..." : "Submit" }}
             </Button>
           </template>
         </form.Subscribe>

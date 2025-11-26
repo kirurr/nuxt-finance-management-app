@@ -50,7 +50,7 @@ const colors = useQuery({
       <form.Field
         name="name"
         :validators="{
-          onChange: z.string().min(1, 'Name must be at least 1 character'),
+          onChange: z.string().min(1, 'Name must be at least 1 character').max(256, 'Name must be at most 256 characters'),
         }"
       >
         <template #default="{ field }">
@@ -201,7 +201,7 @@ const colors = useQuery({
         <form.Subscribe>
           <template #default="{ canSubmit, isSubmitting }">
             <Button type="submit" :disabled="!canSubmit">
-              {{ isSubmitting ? "..." : "Submit" }}
+              {{ isSubmitting ? "Submitting..." : "Submit" }}
             </Button>
           </template>
         </form.Subscribe>

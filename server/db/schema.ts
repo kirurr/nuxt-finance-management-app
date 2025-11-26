@@ -115,7 +115,7 @@ export const userBudget = sqliteTable(
       .notNull()
       .references(() => user.id),
     amount: integer("amount").notNull(),
-    isActive: integer("is_active", { mode: "boolean" }).default(true).unique(),
+    isActive: integer("is_active", { mode: "boolean" }).default(true),
     month: integer("month").notNull(),
     year: integer("year").notNull(),
   },

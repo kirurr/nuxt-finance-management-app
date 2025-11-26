@@ -28,6 +28,7 @@ async function handleSignUp({
     errorRef.value = error.message ?? "Unknown error";
     return;
   }
+	navigateTo("/")
 }
 
 const form = useForm({
