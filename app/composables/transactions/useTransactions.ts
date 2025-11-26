@@ -1,10 +1,7 @@
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { useQuery, useMutation } from "@tanstack/vue-query";
 import queryKeys from "~/lib/query-keys";
-import type {
-  TransactionFormData,
-  TransactionWithCategory,
-} from "~~/server/transaction/schema";
+import type { TransactionFormData } from "~~/server/transaction/schema";
 
 export function useTransactions() {
   const dateStore = useDateStore();
@@ -21,13 +18,13 @@ export function useTransactions() {
       ].filter(Boolean),
     ),
     queryFn: async () => {
-
       return await $orpc.transaction.getTransactionsByUserId.call({
         startDate: dateStore.startDate.toDate(localTimeZone),
         endDate:
           dateStore.endDate?.toDate(localTimeZone) ??
           dateStore.startDate.toDate(localTimeZone),
-      })}
+      });
+    },
   });
 
   const updateMutation = useMutation({
@@ -48,23 +45,10 @@ export function useTransactions() {
     },
     mutationKey: [...queryKeys.transactions],
     onSuccess: async (value, data, ___, context) => {
-      context.client.setQueriesData<TransactionWithCategory[]>(
-        { queryKey: [...queryKeys.transactions], exact: false },
-        (old) => {
-          if (!old) {
-            return [value];
-          }
-
-          const index = old?.findIndex((item) => item.id === data.id);
-          if (index == -1) {
-            return old;
-          }
-
-          const newArray = [...old];
-          newArray[index] = value;
-          return newArray;
-        },
-      );
+      context.client.invalidateQueries({
+        queryKey: [...queryKeys.transactions],
+        exact: false,
+      });
     },
   });
 
@@ -79,10 +63,10 @@ export function useTransactions() {
     },
     mutationKey: [...queryKeys.transactions],
     onSuccess: async (value, _, ___, context) => {
-      context.client.setQueriesData<TransactionWithCategory[]>(
-        { queryKey: [...queryKeys.transactions], exact: false },
-        (old) => [value, ...(old ?? [])],
-      );
+      context.client.invalidateQueries({
+        queryKey: [...queryKeys.transactions],
+        exact: false,
+      });
     },
   });
 
@@ -92,10 +76,10 @@ export function useTransactions() {
     },
     mutationKey: [...queryKeys.transactions],
     onSuccess: async (_, id, ___, context) => {
-      context.client.setQueriesData<TransactionWithCategory[]>(
-        { queryKey: [...queryKeys.transactions], exact: false },
-        (old) => [...(old ?? [])].filter((item) => item.id !== id),
-      );
+      context.client.invalidateQueries({
+        queryKey: [...queryKeys.transactions],
+        exact: false,
+      });
     },
   });
 

@@ -25,10 +25,10 @@ export function useBudget() {
     },
     mutationKey: [...queryKeys.budget],
     onSuccess: async (value, _, ___, context) => {
-      context.client.setQueriesData<UserBudget>(
-        { queryKey: [...queryKeys.budget], exact: false },
-        () => value,
-      );
+      context.client.invalidateQueries({
+        queryKey: [...queryKeys.budget],
+        exact: false,
+      });
     },
   });
 

@@ -2,7 +2,6 @@ import { useQuery, useMutation } from "@tanstack/vue-query";
 import queryKeys from "~/lib/query-keys";
 import type {
   CategoryFormData,
-  CategoryWithIconAndColor,
 } from "~~/server/category/schema";
 
 export function useCategories() {
@@ -30,23 +29,10 @@ export function useCategories() {
     },
     mutationKey: [...queryKeys.categories],
     onSuccess: async (value, data, ___, context) => {
-      context.client.setQueriesData<CategoryWithIconAndColor[]>(
-        { queryKey: [...queryKeys.categories], exact: false },
-        (old) => {
-          if (!old) {
-            return [value];
-          }
-
-          const index = old?.findIndex((item) => item.id === data.id);
-          if (index == -1) {
-            return old;
-          }
-
-          const newArray = [...old];
-          newArray[index] = value;
-          return newArray;
-        },
-      );
+      context.client.invalidateQueries({
+        queryKey: [...queryKeys.categories],
+        exact: false,
+      });
     },
   });
 
@@ -60,10 +46,10 @@ export function useCategories() {
     },
     mutationKey: [...queryKeys.categories],
     onSuccess: async (value, _, ___, context) => {
-      context.client.setQueriesData<CategoryWithIconAndColor[]>(
-        { queryKey: [...queryKeys.categories], exact: false },
-        (old) => [value, ...(old ?? [])],
-      );
+      context.client.invalidateQueries({
+        queryKey: [...queryKeys.categories],
+        exact: false,
+      });
     },
   });
 
@@ -73,10 +59,10 @@ export function useCategories() {
     },
     mutationKey: [...queryKeys.categories],
     onSuccess: async (_, id, ___, context) => {
-      context.client.setQueriesData<CategoryWithIconAndColor[]>(
-        { queryKey: [...queryKeys.categories], exact: false },
-        (old) => [...(old ?? [])].filter((item) => item.id !== id),
-      );
+      context.client.invalidateQueries({
+        queryKey: [...queryKeys.categories],
+        exact: false,
+      });
     },
   });
 
