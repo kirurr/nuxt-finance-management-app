@@ -24,6 +24,6 @@ const defaultValues = {
 <template>
 	<div>
 		<BudgetForm :default-values="defaultValues" :action="handleSubmit" />
-		<em v-if="createMutation.isError">{{ createMutation.error }}</em>
+		<em v-if="updateMutation.isError">{{ updateMutation.error }}</em>
 	</div>
 </template>

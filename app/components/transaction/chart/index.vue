@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { calculateChartData } from "~/composables/transactions/charts";
 import { useTransactions } from "~/composables/transactions/useTransactions";
+import { createMoneyString } from "~/lib/utils";
+
 const { title, type } = defineProps<{
 	title: string;
 	type: "expense" | "income";
@@ -19,7 +21,7 @@ const value = computed(() => chart.value.chartData.reduce((acc, cur) => acc + cu
 			<slot name="icon"/>
 			<div>
 				<h3 class="text-lg font-bold">{{ title }}:</h3>
-				<p class="text-muted-foreground">{{ value }} for given period</p>
+				<p class="text-muted-foreground">{{ createMoneyString( value ) }} for given period</p>
 			</div>
 		</div>
     <DonutChart
@@ -27,6 +29,7 @@ const value = computed(() => chart.value.chartData.reduce((acc, cur) => acc + cu
       :data="chart.chartData"
       :category="'total'"
       :colors="[...chart.colors]"
+			:value-formatter="(v) => createMoneyString(v)"
 			class="h-92 mx-auto w-full lg:w-92"
 			:arc-width="60"
     />

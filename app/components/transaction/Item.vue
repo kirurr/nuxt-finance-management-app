@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { TransactionWithCategory } from "~~/server/transaction/schema";
 import { colord } from "colord";
+import { createMoneyString } from "~/lib/utils";
 
 const { data } = defineProps<{
   data: TransactionWithCategory;
@@ -80,10 +81,10 @@ const isHaveCategory = computed(() => data.category);
     </div>
     <div class="text-xl font-bold ml-auto flex items-center" :aria-label="`${data.type === 'expense' ? 'Expense' : 'Income'} amount: ${data.type === 'expense' ? '-' : '+'}${data.amount}`">
       <span v-if="data.type === 'expense'" class="text-destructive"
-        >-{{ data.amount }}</span
+        >-{{ createMoneyString( data.amount ) }}</span
       >
       <span v-if="data.type === 'income'" class="text-success"
-        >+{{ data.amount }}</span
+        >+{{ createMoneyString( data.amount ) }}</span
       >
     </div>
     <div class="flex flex-col lg:flex-row items-center gap-2" role="group" aria-label="Transaction actions">

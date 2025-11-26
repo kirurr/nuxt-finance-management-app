@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { colord } from "colord";
 import type { TransactionWithCategory } from "~~/server/transaction/schema";
+import { createMoneyString } from "~/lib/utils";
 
 const { categories } = defineProps<{
   categories: {
@@ -42,7 +43,7 @@ const { categories } = defineProps<{
         }"
       />
       <span class="mr-auto">{{ item.name }}</span>
-      <span>{{ item.total }}</span>
+      <span>{{ createMoneyString( item.total ) }}</span>
     </li>
   </ul>
 </template>

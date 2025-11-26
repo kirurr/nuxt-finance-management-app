@@ -20,7 +20,7 @@ const internalValue = ref(props.modelValue);
 
 const extendedData = computed(() => [
   { label: "All", value: "" },
-  { label: "Without category", value: "no category" },
+  { label: "Without category", value: "without category" },
   ...props.data,
 ]);
 
@@ -76,7 +76,9 @@ const inputId = computed(() => props.id ?? "items-select");
               :key="item.value"
               :item="item"
               :is-selected="internalValue === item.value"
-							:category="categoriesData?.find((c) => c.id === parseInt(item.value))"
+              :category="
+                categoriesData?.find((c) => c.id === parseInt(item.value))
+              "
               @select="
                 () => {
                   internalValue =

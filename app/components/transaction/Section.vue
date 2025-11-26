@@ -32,29 +32,41 @@ watch(
 const form = useForm({
   defaultValues: {
     category: "",
-    minPrice: "",
-    maxPrice: "",
+    minAmount: "",
+    maxAmount: "",
+    type: "",
   },
   onSubmit: ({ value }) => {
+    console.log(value);
     let filteredTransactions = [...originalTransactions.value]; // ← START FROM ORIGINAL
 
-    if (value.minPrice) {
+    if (value.minAmount) {
       filteredTransactions = filteredTransactions.filter(
-        (t) => t.amount >= Number(value.minPrice),
+        (t) => t.amount >= Number(value.minAmount),
       );
     }
 
-    if (value.maxPrice) {
+    if (value.maxAmount) {
       filteredTransactions = filteredTransactions.filter(
-        (t) => t.amount <= Number(value.maxPrice),
+        (t) => t.amount <= Number(value.maxAmount),
       );
     }
 
-    if (value.category === "no category") {
+    if (value.category === "without category") {
       filteredTransactions = filteredTransactions.filter((t) => !t.categoryId);
-    } else {
+    } else if (value.category !== "") {
       filteredTransactions = filteredTransactions.filter(
         (t) => t.categoryId?.toString() === value.category,
+      );
+    }
+
+    if (value.type === "expense") {
+      filteredTransactions = filteredTransactions.filter(
+        (t) => t.type === "expense",
+      );
+    } else if (value.type === "income") {
+      filteredTransactions = filteredTransactions.filter(
+        (t) => t.type === "income",
       );
     }
 
@@ -64,16 +76,26 @@ const form = useForm({
 </script>
 
 <template>
-  <section id="transactions" class="lg:mt-12" aria-labelledby="transactions-title">
+  <section
+    id="transactions"
+    class="lg:mt-12"
+    aria-labelledby="transactions-title"
+  >
     <Card class="p-4 rounded-md my-8">
       <div
         class="flex flex-col gap-4 lg:gap-0 lg:flex-row justify-between lg:items-center"
       >
         <div>
-          <h2 id="transactions-title" class="text-3xl font-bold">Transactions</h2>
+          <h2 id="transactions-title" class="text-3xl font-bold">
+            Transactions
+          </h2>
         </div>
         <div class="flex flex-col-reverse lg:flex-row gap-2 lg:gap-4">
-          <Button variant="outline" aria-label="Toggle filters" @click="toggleFilters">
+          <Button
+            variant="outline"
+            aria-label="Toggle filters"
+            @click="toggleFilters"
+          >
             <Funnel aria-hidden="true" /> Filters
           </Button>
           <TransactionDialogCreate />
@@ -87,7 +109,7 @@ const form = useForm({
             aria-label="Transaction filters form"
             @submit.prevent.stop="form.handleSubmit"
           >
-            <FieldGroup class="grid lg:grid-cols-3 gap-4 items-center">
+            <FieldGroup class="grid lg:grid-cols-4 gap-4 items-center">
               <form.Field name="category">
                 <template #default="{ field }">
                   <Field>
@@ -108,35 +130,79 @@ const form = useForm({
                   </Field>
                 </template>
               </form.Field>
+              <form.Field name="type">
+                <template #default="{ field }">
+                  <Field>
+                    <Select
+                      id="type-filter"
+                      v-model="field.state.value"
+                      class="bg-background"
+                      aria-label="Type filter"
+                      :name="field.name"
+                      @update:model-value="
+                        (v) => field.handleChange(v?.toString() ?? '')
+                      "
+                      @blur="field.handleBlur"
+                    >
+                      <SelectTrigger class="">
+                        <SelectValue>
+                          <template v-if="field.state.value === 'expense'">
+                            <span class="text-destructive font-bold"
+                              >Expense</span
+                            >
+                          </template>
+                          <template v-else-if="field.state.value === 'income'">
+                            <span class="text-success font-bold">Income</span>
+                          </template>
+                          <template v-else>
+                            <span>Select type</span>
+                          </template>
+                        </SelectValue>
+                        <SelectContent>
+                          <SelectItem :value="null">Select type</SelectItem>
+                          <SelectItem value="expense">
+                            <span class="text-destructive font-bold"
+                              >Expense</span
+                            >
+                          </SelectItem>
+                          <SelectItem value="income">
+                            <span class="text-success font-bold">Income</span>
+                          </SelectItem>
+                        </SelectContent>
+                      </SelectTrigger>
+                    </Select>
+                  </Field>
+                </template>
+              </form.Field>
               <FieldSet class="flex flex-row gap-2 items-center">
-                <form.Field name="minPrice">
+                <form.Field name="minAmount">
                   <template #default="{ field }">
                     <Field>
                       <Input
-                        id="min-price-filter"
+                        id="min-amount-filter"
                         v-model="field.state.value"
                         class="bg-background"
-                        aria-label="Min price filter"
+                        aria-label="Min amount filter"
                         :name="field.name"
                         type="number"
-                        placeholder="Min price"
+                        placeholder="Min amount"
                         @blur="field.handleBlur"
                         @input="(e: any) => field.handleChange(e.target.value)"
                       />
                     </Field>
                   </template>
                 </form.Field>
-                <form.Field name="maxPrice">
+                <form.Field name="maxAmount">
                   <template #default="{ field }">
                     <Field>
                       <Input
-                        id="max-price-filter"
+                        id="max-amount-filter"
                         v-model="field.state.value"
                         class="bg-background"
-                        aria-label="Max price filter"
+                        aria-label="Max amount filter"
                         :name="field.name"
                         type="number"
-                        placeholder="Max price"
+                        placeholder="Max amount"
                         @blur="field.handleBlur"
                         @input="(e: any) => field.handleChange(e.target.value)"
                       />
@@ -145,20 +211,22 @@ const form = useForm({
                 </form.Field>
               </FieldSet>
               <Field>
-                <Button type="submit" aria-label="Apply filters"> Apply filters </Button>
+                <Button type="submit" aria-label="Apply filters">
+                  Apply filters
+                </Button>
               </Field>
             </FieldGroup>
           </form>
         </CollapsibleContent>
       </Collapsible>
 
-			<template v-if="isPending">
-				<LoaderCircle
-          class="size-16 mx-auto lg:size-32 text-primary/60 animate-spin"
+      <template v-if="isPending">
+        <LoaderCircle
+          class="size-12 mx-auto lg:size-16 text-primary/60 animate-spin"
           aria-label="Loading transactions"
           role="status"
         />
-			</template>
+      </template>
       <span v-else-if="error"
         >Error: {{ error.message ?? "Unknown error" }}</span
       >
