@@ -3,7 +3,6 @@ import { Funnel, LoaderCircle } from "lucide-vue-next";
 import { useTransactions } from "~/composables/transactions/useTransactions";
 import type { TransactionWithCategory } from "~~/server/transaction/schema";
 import { useForm } from "@tanstack/vue-form";
-import CategoryCombobox from "~/components/ui/CategoryCombobox.vue";
 
 const isFiltersOpen = ref(false);
 

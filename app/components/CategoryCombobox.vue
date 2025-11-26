@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ChevronsUpDownIcon } from "lucide-vue-next";
-import CategoryComboboxItem from "~/components/ui/CategoryComboboxItem.vue";
 import { ref, watch } from "vue";
 
 interface Item {
