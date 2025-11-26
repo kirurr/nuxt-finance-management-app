@@ -16,6 +16,12 @@ async function handleSubmit(data: UserBudgetFormData) {
 <template>
 	<div>
 		<BudgetForm :action="handleSubmit" />
-		<em v-if="createMutation.isError">{{ createMutation.error }}</em>
+    <em
+      v-if="createMutation.isError"
+      class="mt-4 text-destructive-foreground"
+      aria-live="assertive"
+      aria-label="Budget form error"
+      >{{ createMutation.error }}</em
+    >
 	</div>
 </template>

@@ -10,20 +10,25 @@ const { updateMutation } = useBudget();
 
 async function handleSubmit(data: UserBudgetFormData) {
   await updateMutation.mutateAsync({ id: originalData.id, data });
-	closeDialog();
+  closeDialog();
 }
 
 const defaultValues = {
   amount: originalData.amount.toString(),
-	month: originalData.month.toString(),
-	year: originalData.year.toString(),
-}
-
+  month: originalData.month.toString(),
+  year: originalData.year.toString(),
+};
 </script>
 
 <template>
-	<div>
-		<BudgetForm :default-values="defaultValues" :action="handleSubmit" />
-		<em v-if="updateMutation.isError">{{ updateMutation.error }}</em>
-	</div>
+  <div>
+    <BudgetForm :default-values="defaultValues" :action="handleSubmit" />
+    <em
+      v-if="updateMutation.isError"
+      class="mt-4 text-destructive-foreground"
+      aria-live="assertive"
+      aria-label="Budget form error"
+      >{{ updateMutation.error }}</em
+    >
+  </div>
 </template>
