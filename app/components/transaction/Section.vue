@@ -3,6 +3,7 @@ import { Funnel, LoaderCircle } from "lucide-vue-next";
 import { useTransactions } from "~/composables/transactions/useTransactions";
 import type { TransactionWithCategory } from "~~/server/transaction/schema";
 import { useForm } from "@tanstack/vue-form";
+import * as z from "zod";
 
 const isFiltersOpen = ref(false);
 
@@ -175,7 +176,18 @@ const form = useForm({
                 </template>
               </form.Field>
               <FieldSet class="flex flex-row gap-2 items-center">
-                <form.Field name="minAmount">
+                <form.Field
+									name="minAmount"
+									:validators="{
+										onChange: z.string().refine((val) => {
+											const num = Number(val);
+											if (num) return { message: 'Amount must be a number' };
+											if (num <= 0) return { message: 'Amount must be greater than 0' };
+											if (num >= Number.MAX_VALUE)
+												return { message: 'Number is too large' };
+										}),
+									}"
+								>
                   <template #default="{ field }">
                     <Field>
                       <Input
@@ -192,7 +204,18 @@ const form = useForm({
                     </Field>
                   </template>
                 </form.Field>
-                <form.Field name="maxAmount">
+                <form.Field
+									name="maxAmount"
+									:validators="{
+										onChange: z.string().refine((val) => {
+											const num = Number(val);
+											if (num) return { message: 'Amount must be a number' };
+											if (num <= 0) return { message: 'Amount must be greater than 0' };
+											if (num >= Number.MAX_VALUE)
+												return { message: 'Number is too large' };
+										}),
+									}"
+								>
                   <template #default="{ field }">
                     <Field>
                       <Input
