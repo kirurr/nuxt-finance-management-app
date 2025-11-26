@@ -33,6 +33,10 @@ export function useCategories() {
         queryKey: [...queryKeys.categories],
         exact: false,
       });
+      context.client.invalidateQueries({
+        queryKey: [...queryKeys.transactions],
+        exact: false,
+      });
     },
   });
 
@@ -50,6 +54,10 @@ export function useCategories() {
         queryKey: [...queryKeys.categories],
         exact: false,
       });
+      context.client.invalidateQueries({
+        queryKey: [...queryKeys.transactions],
+        exact: false,
+      });
     },
   });
 
@@ -61,6 +69,10 @@ export function useCategories() {
     onSuccess: async (_, id, ___, context) => {
       context.client.invalidateQueries({
         queryKey: [...queryKeys.categories],
+        exact: false,
+      });
+      context.client.invalidateQueries({
+        queryKey: [...queryKeys.transactions],
         exact: false,
       });
     },

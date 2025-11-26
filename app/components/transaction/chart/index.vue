@@ -2,7 +2,7 @@
 import { calculateChartData } from "~/composables/transactions/charts";
 import { useTransactions } from "~/composables/transactions/useTransactions";
 const { title, type } = defineProps<{
-	title?: string;
+	title: string;
 	type: "expense" | "income";
 }>();
 

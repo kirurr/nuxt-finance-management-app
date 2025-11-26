@@ -14,5 +14,8 @@ async function handleSubmit(data: UserBudgetFormData) {
 </script>
 
 <template>
-  <BudgetForm :action="handleSubmit" />
+	<div>
+		<BudgetForm :action="handleSubmit" />
+		<em v-if="createMutation.isError">{{ createMutation.error }}</em>
+	</div>
 </template>

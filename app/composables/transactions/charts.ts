@@ -30,16 +30,20 @@ export function calculateChartData(
   >();
 
   for (const transaction of sortedData) {
-    if (transaction.type === (type === "income" ? "expense" : "income")) {
-      continue;
-    }
     const name = transaction.category?.name ?? "Without category";
     const item = valuesMap.get(name);
-    valuesMap.set(name, {
-      total: item?.total ?? 0 + transaction.amount,
-      transactions: [...(item?.transactions ?? []), transaction],
-    });
+		if (item) {
+			item.total += transaction.amount;
+			item.transactions.push(transaction);
+		}
+		else {
+			valuesMap.set(name, {
+				total:transaction.amount,
+				transactions: [transaction],
+			});
+		}
   }
+
   const chartData = Array.from(valuesMap.entries()).map(([name, value]) => ({
     name,
     total: value.total,

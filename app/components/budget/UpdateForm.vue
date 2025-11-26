@@ -22,5 +22,8 @@ const defaultValues = {
 </script>
 
 <template>
-  <BudgetForm :default-values="defaultValues" :action="handleSubmit" />
+	<div>
+		<BudgetForm :default-values="defaultValues" :action="handleSubmit" />
+		<em v-if="createMutation.isError">{{ createMutation.error }}</em>
+	</div>
 </template>
