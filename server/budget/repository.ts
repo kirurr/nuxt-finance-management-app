@@ -69,6 +69,14 @@ export const userBudgetRepository = {
     if (result.length === 0) {
       return null;
     }
+
+		console.log(start.toISOString(), start.getMonth() + 1)
+		console.log({
+			startUnix: Math.floor(start.getTime() / 1000),
+			endUnix: Math.floor(end.getTime() / 1000),
+			month: start.getMonth() + 1,
+			year: start.getFullYear(),
+		});
     return result[0];
   },
 };
