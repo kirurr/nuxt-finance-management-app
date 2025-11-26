@@ -5,15 +5,16 @@ import { cn } from "~/lib/utils";
 
 const isLoading = computed(() => authClient.useSession().value.isPending);
 
-// useHead({
-//   htmlAttrs: {
-//     style: isLoading.value && "overflow: hidden;",
-//   },
-// });
-//
-// watch(isLoading, (v) => {
-//   document.documentElement.style.overflow = v ? "hidden" : "visible";
-// });
+// Update body overflow based on loading state
+useHead({
+  htmlAttrs: {
+    style: isLoading.value && "overflow: hidden;",
+  },
+});
+
+watch(isLoading, (v) => {
+  document.documentElement.style.overflow = v ? "hidden" : "visible";
+});
 </script>
 <template>
   <div :class="cn('w-screen lg:w-6xl mx-auto relative')">

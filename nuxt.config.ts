@@ -25,4 +25,20 @@ export default defineNuxtConfig({
      */
     componentDir: "~/components/ui",
   },
+  app: {
+    head: {
+      title: "Expensess - Track Your Expenses",
+      meta: [
+        { charset: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: "description", content: "A simple expense tracking application to manage your budget and expenses" },
+        { name: "keywords", content: "expenses, budget, finance, tracking, money management" },
+        { name: "author", content: "Expensess App" },
+        { name: "theme-color", content: "#ffffff" },
+      ],
+      link: [
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+      ],
+    },
+  },
 });

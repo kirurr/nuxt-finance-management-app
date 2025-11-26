@@ -5,6 +5,17 @@ definePageMeta({
   middleware: "auth",
 });
 
+useHead({
+  title: "Dashboard - Expensess",
+  meta: [
+    {
+      name: "description",
+      content:
+        "View your budget summary, expenses, and income on the dashboard",
+    },
+  ],
+});
+
 function calculatePercentages(total: number, spent: number) {
   if (total === 0) {
     return { spentPercent: 0, remainingPercent: 0 };
@@ -34,7 +45,10 @@ const progressData = computed(() =>
 );
 </script>
 <template>
-  <section class="space-y-8 lg:space-y-4 px-2 lg:px-0" aria-labelledby="budget-summary">
+  <section
+    class="space-y-8 lg:space-y-4 px-2 lg:px-0"
+    aria-labelledby="budget-summary"
+  >
     <div class="flex flex-col lg:flex-row items-center justify-between">
       <div>
         <h1 id="budget-summary" class="text-4xl font-bold mb-2">
@@ -55,9 +69,11 @@ const progressData = computed(() =>
               >
                 Monthly budget
               </h3>
-              <span class="text-4xl font-bold" aria-label="Monthly budget amount">{{
-                budgetData?.amount ?? 0
-              }}</span>
+              <span
+                class="text-4xl font-bold"
+                aria-label="Monthly budget amount"
+                >{{ budgetData?.amount ?? 0 }}</span
+              >
             </div>
             <div>
               <div class="flex flex-row items-center gap-2">
@@ -69,7 +85,9 @@ const progressData = computed(() =>
             <div class="w-full">
               <div class="flex flex-row items-center justify-between mb-2">
                 <span class="text-muted-foreground">Spent</span>
-                <span class="font-bold" aria-label="Amount spent">{{ budgetData?.totalExpenses }}</span>
+                <span class="font-bold" aria-label="Amount spent">{{
+                  budgetData?.totalExpenses
+                }}</span>
               </div>
               <Progress
                 id="spent-progress"
@@ -113,7 +131,9 @@ const progressData = computed(() =>
     <template v-if="budgetData">
       <div class="flex flex-col lg:flex-row w-full gap-4">
         <section aria-labelledby="monthly-income" class="flex-1">
-          <Card class="p-4 lg:p-6 rounded-md flex flex-row gap-4 justify-between lg:justify-start lg:flex-col lg:h-full">
+          <Card
+            class="p-4 lg:p-6 rounded-md flex flex-row gap-4 justify-between lg:justify-start lg:flex-col lg:h-full"
+          >
             <h3 id="monthly-income">Monthly income</h3>
             <p class="text-2xl font-bold" aria-label="Monthly income amount">
               {{ budgetData.totalIncome }}
@@ -121,7 +141,9 @@ const progressData = computed(() =>
           </Card>
         </section>
         <section aria-labelledby="monthly-expenses" class="flex-1">
-          <Card class="p-4 lg:p-6 rounded-md flex flex-row gap-4 justify-between lg:justify-start lg:flex-col lg:h-full">
+          <Card
+            class="p-4 lg:p-6 rounded-md flex flex-row gap-4 justify-between lg:justify-start lg:flex-col lg:h-full"
+          >
             <h3 id="monthly-expenses">Monthly expenses</h3>
             <p class="text-2xl font-bold" aria-label="Monthly expenses amount">
               {{ budgetData.totalExpenses }}
@@ -129,7 +151,9 @@ const progressData = computed(() =>
           </Card>
         </section>
         <section aria-labelledby="monthly-profit" class="flex-1">
-          <Card class="p-4 lg:p-6 rounded-md flex flex-row gap-4 justify-between lg:justify-start lg:flex-col lg:h-full">
+          <Card
+            class="p-4 lg:p-6 rounded-md flex flex-row gap-4 justify-between lg:justify-start lg:flex-col lg:h-full"
+          >
             <h3 id="monthly-profit">Monthly profit</h3>
             <p class="text-2xl font-bold" aria-label="Monthly profit amount">
               {{
@@ -145,7 +169,10 @@ const progressData = computed(() =>
       <Card class="lg:p-6 p-4 rounded-md w-full grow">
         <TransactionChart title="Expenses" type="expense">
           <template #icon>
-            <div class="rounded-md bg-red-200/50 p-2 text-red-600" aria-hidden="true">
+            <div
+              class="rounded-md bg-red-200/50 p-2 text-red-600"
+              aria-hidden="true"
+            >
               <TrendingDown />
             </div>
           </template>
@@ -154,7 +181,10 @@ const progressData = computed(() =>
       <Card class="p-6 rounded-md w-full grow">
         <TransactionChart title="Income" type="income">
           <template #icon>
-            <div class="rounded-md bg-green-200/50 p-2 text-green-600" aria-hidden="true">
+            <div
+              class="rounded-md bg-green-200/50 p-2 text-green-600"
+              aria-hidden="true"
+            >
               <TrendingUp />
             </div>
           </template>
@@ -162,7 +192,6 @@ const progressData = computed(() =>
       </Card>
     </div>
 
-		<TransactionSection />
-
+    <TransactionSection />
   </section>
 </template>
