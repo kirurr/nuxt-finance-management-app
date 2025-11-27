@@ -36,7 +36,9 @@ function calculatePercentages(total: number, spent: number) {
 }
 
 const { budget } = useBudget();
-const { data: budgetData, isPending: isBudgetPending } = budget;
+const { data: budgetData, isPending } = budget;
+
+const isBudgetPending = computed(() => isPending.value);
 
 const progressData = computed(() =>
   calculatePercentages(
@@ -61,12 +63,19 @@ const progressData = computed(() =>
 
     <section aria-labelledby="monthly-budget">
       <Card class="p-6 rounded-md">
-				<template v-if="isBudgetPending">
-					<div class="flex items-center justify-center min-h-40">
-						<LoaderCircle class="size-12 lg:size-16 text-primary/60 animate-spin" />
-					</div>
-				</template>
-        <template v-if="budgetData">
+        <template v-if="isBudgetPending">
+          <div class="flex items-center justify-center min-h-40">
+            <LoaderCircle
+              class="size-12 lg:size-16 text-primary/60 animate-spin"
+            />
+          </div>
+        </template>
+        <template v-else-if="!isBudgetPending && !budgetData">
+          <div class="flex flex-row items-center gap-2 justify-center min-h-40">
+            <BudgetDialogCreate />
+          </div>
+        </template>
+        <template v-else-if="budgetData">
           <div class="flex flex-row justify-between">
             <div>
               <h3
@@ -78,7 +87,7 @@ const progressData = computed(() =>
               <span
                 class="text-4xl font-bold"
                 aria-label="Monthly budget amount"
-                >{{ createMoneyString( budgetData?.amount ?? 0 ) }}</span
+                >{{ createMoneyString(budgetData?.amount ?? 0) }}</span
               >
             </div>
             <div>
@@ -92,7 +101,7 @@ const progressData = computed(() =>
               <div class="flex flex-row items-center justify-between mb-2">
                 <span class="text-muted-foreground">Spent</span>
                 <span class="font-bold" aria-label="Amount spent">{{
-                  createMoneyString( budgetData?.totalExpenses )
+                  createMoneyString(budgetData?.totalExpenses)
                 }}</span>
               </div>
               <Progress
@@ -109,9 +118,11 @@ const progressData = computed(() =>
               <div class="flex flex-row items-center justify-between mb-2">
                 <span class="text-muted-foreground">Remaining</span>
                 <span class="font-bold" aria-label="Amount remaining">{{
-                  createMoneyString( budgetData?.remainingBudget > 0
-                    ? budgetData?.remainingBudget
-                    : 0 )
+                  createMoneyString(
+                    budgetData?.remainingBudget > 0
+                      ? budgetData?.remainingBudget
+                      : 0,
+                  )
                 }}</span>
               </div>
               <Progress
@@ -126,11 +137,6 @@ const progressData = computed(() =>
             </div>
           </div>
         </template>
-        <template v-else-if="!isBudgetPending && !budgetData">
-          <div class="flex flex-row items-center gap-2 justify-center min-h-40">
-            <BudgetDialogCreate />
-          </div>
-        </template>
       </Card>
     </section>
 
@@ -142,7 +148,7 @@ const progressData = computed(() =>
           >
             <h3 id="monthly-income">Monthly income</h3>
             <p class="text-2xl font-bold" aria-label="Monthly income amount">
-              {{ createMoneyString( budgetData.totalIncome ) }}
+              {{ createMoneyString(budgetData.totalIncome) }}
             </p>
           </Card>
         </section>
@@ -152,7 +158,7 @@ const progressData = computed(() =>
           >
             <h3 id="monthly-expenses">Monthly expenses</h3>
             <p class="text-2xl font-bold" aria-label="Monthly expenses amount">
-              {{ createMoneyString( budgetData.totalExpenses ) }}
+              {{ createMoneyString(budgetData.totalExpenses) }}
             </p>
           </Card>
         </section>
@@ -163,7 +169,10 @@ const progressData = computed(() =>
             <h3 id="monthly-profit">Monthly profit</h3>
             <p class="text-2xl font-bold" aria-label="Monthly profit amount">
               {{
-                createMoneyString( (budgetData.totalIncome ?? 0) - (budgetData.totalExpenses ?? 0) )
+                createMoneyString(
+                  (budgetData.totalIncome ?? 0) -
+                    (budgetData.totalExpenses ?? 0),
+                )
               }}
             </p>
           </Card>

@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from "@tanstack/vue-query";
 import queryKeys from "~/lib/query-keys";
-import type { UserBudget, UserBudgetFormData } from "~~/server/budget/schema";
+import type { UserBudgetFormData } from "~~/server/budget/schema";
 import { getLocalTimeZone } from "@internationalized/date";
 
 export function useBudget() {
@@ -43,10 +43,10 @@ export function useBudget() {
     },
     mutationKey: [...queryKeys.budget],
     onSuccess: async (value, _, ___, context) => {
-      context.client.setQueriesData<UserBudget>(
-        { queryKey: [...queryKeys.budget], exact: false },
-        () => value,
-      );
+      context.client.invalidateQueries({
+        queryKey: [...queryKeys.budget],
+        exact: false,
+      });
     },
   });
 

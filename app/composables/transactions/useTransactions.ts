@@ -52,6 +52,13 @@ export function useTransactions() {
     },
   });
 
+  const monthAndYear = computed<[string, string]>(() => {
+    const month = dateStore.startDate.month.toString();
+    const year = dateStore.startDate.year.toString();
+
+    return [month, year];
+  });
+
   const createMutation = useMutation({
     mutationFn: async (data: TransactionFormData) => {
       return await $orpc.transaction.createTransaction.call({
@@ -59,6 +66,8 @@ export function useTransactions() {
         date: parseDate(data.date).toDate(getLocalTimeZone()),
         categoryId: data.categoryId ? Number(data.categoryId) : null,
         amount: Number(data.amount),
+				month: Number(monthAndYear.value[0]),
+				year: Number(monthAndYear.value[1]),
       });
     },
     mutationKey: [...queryKeys.transactions],

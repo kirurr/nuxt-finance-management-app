@@ -13,11 +13,15 @@ export const transactionService = {
     userId,
     type,
     amount,
+		month,
+		year
   }: {
     date: Date;
     userId: string;
     type: "expense" | "income";
     amount: number;
+		month: number;
+		year: number;
   }): Promise<void> {
     const start = new Date(date.getFullYear(), date.getMonth(), 1);
     const end = new Date(
@@ -33,6 +37,8 @@ export const transactionService = {
       userId,
       start,
       end,
+			month,
+			year
     );
     if (budgetInfo) {
       const sign = type === "expense" ? -1 : 1;
@@ -67,7 +73,10 @@ export const transactionService = {
     }
   },
   async createTransaction(
-    data: CreateTransaction,
+    data: CreateTransaction & {
+			month: number;
+			year: number;
+		},
   ): Promise<TransactionWithCategory> {
     this.handleNotification(data);
 

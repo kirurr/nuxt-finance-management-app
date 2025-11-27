@@ -37,7 +37,10 @@ const form = useForm({
     email: "",
     password: "",
   },
-  onSubmit: async ({ value }) => await handleSignUp(value),
+	onSubmit: async ({ value }) => {
+		errorRef.value = ""
+		await handleSignUp(value)
+	},
 });
 </script>
 

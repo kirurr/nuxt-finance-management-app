@@ -9,14 +9,24 @@ import { transactionService } from "./service";
 
 export const transactionRouter = {
   createTransaction: authed
-    .input(createTransactionSchema.omit({ userId: true }))
+    .input(
+      createTransactionSchema
+        .omit({ userId: true })
+        .and(z.object({ month: z.number(), year: z.number() })),
+    )
     .handler(async ({ input, context }): Promise<TransactionWithCategory> => {
-      return await transactionService.createTransaction({ ...input, userId: context.user.id });
+      return await transactionService.createTransaction({
+        ...input,
+        userId: context.user.id,
+      });
     }),
   updateTransaction: authed
     .input(updateTransactionSchema)
     .handler(async ({ input, context }): Promise<TransactionWithCategory> => {
-      return await transactionService.updateTransaction(input.id, { ...input, userId: context.user.id });
+      return await transactionService.updateTransaction(input.id, {
+        ...input,
+        userId: context.user.id,
+      });
     }),
   getTransaction: authed
     .input(z.number())
@@ -27,7 +37,7 @@ export const transactionRouter = {
     .input(
       z.object({
         startDate: z.date(),
-        endDate: z.date()
+        endDate: z.date(),
       }),
     )
     .handler(async ({ context, input }): Promise<TransactionWithCategory[]> => {
